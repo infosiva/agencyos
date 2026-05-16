@@ -1,0 +1,96 @@
+{
+  "_comment": "Paste this into Vercel Edge Config (ecfg_s5cumfsw58v5mpe9ahpkb7axmigs). Changes take effect within 5 minutes — zero redeploy.",
+
+  "fallback_order": [
+    "ollama",
+    "groq", "gemini", "cerebras", "together",
+    "openrouter",
+    "mistral", "nvidia", "kimi", "deepseek",
+    "perplexity", "xai", "cohere",
+    "openai", "anthropic"
+  ],
+
+  "disabled_providers": [],
+
+  "groq_tiers": {
+    "fast":     ["llama-3.1-8b-instant"],
+    "balanced": ["llama-3.3-70b-versatile"],
+    "best":     ["meta-llama/llama-4-scout-17b-16e-instruct", "qwen/qwen3-32b"]
+  },
+  "gemini_tiers": {
+    "fast":     ["gemini-2.0-flash-lite"],
+    "balanced": ["gemini-2.0-flash"],
+    "best":     ["gemini-2.5-flash", "gemini-2.5-pro"]
+  },
+  "cerebras_tiers": {
+    "fast":     ["llama3.1-8b"],
+    "balanced": ["gpt-oss-120b"],
+    "best":     ["qwen-3-235b-a22b-instruct-2507"]
+  },
+  "together_tiers": {
+    "fast":     ["meta-llama/Llama-3.2-3B-Instruct-Turbo"],
+    "balanced": ["meta-llama/Llama-3.3-70B-Instruct-Turbo"],
+    "best":     ["meta-llama/Llama-4-Maverick-17B-128E-Instruct-FP8"]
+  },
+  "openrouter_tiers": {
+    "fast":     ["meta-llama/llama-3.2-3b-instruct:free"],
+    "balanced": ["meta-llama/llama-3.3-70b-instruct:free"],
+    "best":     ["meta-llama/llama-4-scout:free", "deepseek/deepseek-chat-v3-0324:free"]
+  },
+  "mistral_tiers": {
+    "fast":     ["mistral-small-latest"],
+    "balanced": ["mistral-medium-latest"],
+    "best":     ["mistral-large-latest"]
+  },
+  "nvidia_tiers": {
+    "fast":     ["microsoft/phi-4-mini-instruct"],
+    "balanced": ["qwen/qwen2.5-72b-instruct"],
+    "best":     ["meta/llama-3.1-405b-instruct"]
+  },
+  "kimi_tiers": {
+    "fast":     ["moonshot-v1-8k"],
+    "balanced": ["moonshot-v1-32k"],
+    "best":     ["moonshot-v1-128k"]
+  },
+  "deepseek_tiers": {
+    "fast":     ["deepseek-chat"],
+    "balanced": ["deepseek-chat"],
+    "best":     ["deepseek-reasoner"]
+  },
+  "perplexity_tiers": {
+    "fast":     ["sonar"],
+    "balanced": ["sonar-pro"],
+    "best":     ["sonar-reasoning-pro"]
+  },
+  "xai_tiers": {
+    "fast":     ["grok-3-mini-fast"],
+    "balanced": ["grok-3-mini"],
+    "best":     ["grok-3"]
+  },
+  "cohere_tiers": {
+    "fast":     ["command-r"],
+    "balanced": ["command-r-plus"],
+    "best":     ["command-a-03-2025"]
+  },
+  "claude_tiers": {
+    "fast":     "claude-haiku-4-5-20251001",
+    "balanced": "claude-haiku-4-5-20251001",
+    "best":     "claude-sonnet-4-6"
+  },
+
+  "_how_to_add_new_provider": {
+    "step1": "Add provider name to fallback_order at the right position",
+    "step2": "Add <provider>_tiers object with fast/balanced/best arrays",
+    "step3": "Add <PROVIDER>_API_KEY to Vercel env vars (no redeploy needed for Edge Config changes)",
+    "step4": "Add provider definition to lib/ai.ts DEFAULTS object (one-time code change)",
+    "example_new_provider": {
+      "fallback_order_position": "insert before openai",
+      "tiers_key": "mynewprovider_tiers",
+      "tiers_value": {
+        "fast": ["model-small"],
+        "balanced": ["model-medium"],
+        "best": ["model-large"]
+      }
+    }
+  }
+}
