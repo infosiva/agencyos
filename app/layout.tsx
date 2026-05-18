@@ -5,6 +5,7 @@ import config from '@/vertical.config'
 import { getMeshStyle, getScrollbarColor, COLOR_MAP } from '@/lib/themeColors'
 import Navbar from '@/components/Navbar'
 import DesignEffects from '@/components/DesignEffects'
+import PageTracker from '@/components/PageTracker'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -39,6 +40,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <div style={meshStyle} />
 
         <DesignEffects />
+        <PageTracker site={config.id} />
         <Navbar />
 
         <main className="flex-1">
