@@ -1,9 +1,18 @@
 import type { Metadata } from 'next'
 import './globals.css'
+import Script from 'next/script'
+import ChatBot from '@/components/ChatBot'
 
 export const metadata: Metadata = {
-  title: 'CampaignForge — AI Marketing in 60 Seconds',
-  description: 'Generate complete marketing campaigns: 5-email sequences, Facebook ads, and podcast scripts — forged by AI in under 60 seconds.',
+  metadataBase: new URL('https://campaignforge.vercel.app'),
+  title: 'CampaignForge — Zero-Employee AI Content Agency',
+  description: 'One brief. 7 AI-generated outputs: blog post, podcast script, faceless video, email sequence, LinkedIn posts, short clips, client report. Free to start.',
+  keywords: ['AI content agency', 'faceless video AI', 'AI podcast generator', 'zero employee business', 'content automation'],
+  openGraph: {
+    title: 'CampaignForge — Run a Full AI Agency with Zero Employees',
+    description: 'One brief → blog + podcast + faceless video + emails + LinkedIn + clips + client report. 90 seconds. Free.',
+    type: 'website',
+  },
   icons: {
     icon: "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🔥</text></svg>",
   },
@@ -12,6 +21,26 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
+      <head>
+        <Script
+          id="structured-data"
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "SoftwareApplication",
+              "name": "CampaignForge",
+              "description": "AI-powered marketing campaign and content generator",
+              "applicationCategory": "MarketingApplication",
+              "offers": {
+                "@type": "Offer",
+                "price": "0",
+                "priceCurrency": "USD"
+              }
+            })
+          }}
+        />
+      </head>
       <body style={{ minHeight: '100svh', overscrollBehavior: 'none' }}>
 
         {/* Sticky glass nav */}
@@ -56,7 +85,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <main style={{ position: 'relative', zIndex: 10 }}>
           {children}
         </main>
-
+        <Script defer data-site="campaignforge.vercel.app" src="http://31.97.56.148:3098/t.js" strategy="afterInteractive" />
+        <ChatBot />
       </body>
     </html>
   )
