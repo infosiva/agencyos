@@ -187,7 +187,7 @@ export default function HomePage() {
         flexDirection: 'column',
         alignItems: 'center',
         justifyContent: 'center',
-        padding: '48px 24px',
+        padding: '28px 24px',
       }}>
         <div style={{ width: '100%', maxWidth: 1100 }}>
 
@@ -196,7 +196,7 @@ export default function HomePage() {
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-            style={{ display: 'flex', justifyContent: 'center', marginBottom: 28 }}
+            style={{ display: 'flex', justifyContent: 'center', marginBottom: 18 }}
           >
             <span className="badge-forge">
               <span style={{
@@ -214,7 +214,7 @@ export default function HomePage() {
           <div style={{
             display: 'grid',
             gridTemplateColumns: '1fr 1fr',
-            gap: 48,
+            gap: 32,
             alignItems: 'start',
           }} className="forge-grid-layout">
 
@@ -249,14 +249,14 @@ export default function HomePage() {
                 color: 'var(--ink-2)',
                 fontSize: 16,
                 lineHeight: 1.65,
-                marginBottom: '2rem',
+                marginBottom: '1.2rem',
                 maxWidth: 440,
               }}>
                 Enter your business brief. Walk out with a 5-email nurture sequence, 3 Facebook ads, and a full podcast script — ready to publish.
               </p>
 
               {/* Output chips */}
-              <div style={{ display: 'flex', flexDirection: 'column', gap: 10, marginBottom: '2.5rem' }}>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 8, marginBottom: '1.5rem' }}>
                 {OUTPUTS.map(({ icon: Icon, label, desc }, i) => (
                   <motion.div
                     key={label}
@@ -293,13 +293,13 @@ export default function HomePage() {
               </div>
 
               {/* Stats */}
-              <div style={{ display: 'flex', gap: 32 }}>
+              <div style={{ display: 'flex', gap: 20 }}>
                 {[
                   { n: '< 60s', label: 'to generate' },
                   { n: '9 assets', label: 'per campaign' },
                   { n: 'Free', label: 'to try' },
                 ].map(({ n, label }, i) => (
-                  <div key={n} style={{ display: 'flex', alignItems: 'center', gap: 32 }}>
+                  <div key={n} style={{ display: 'flex', alignItems: 'center', gap: 20 }}>
                     {i > 0 && <div style={{ width: 1, height: 20, background: 'var(--border-s)' }} />}
                     <div>
                       <div style={{ fontSize: 16, fontWeight: 700, color: 'var(--ink-1)', fontFamily: "'Outfit', system-ui, sans-serif" }}>{n}</div>
@@ -452,14 +452,14 @@ export default function HomePage() {
       <section id="how" style={{
         position: 'relative', zIndex: 10,
         borderTop: '1px solid var(--border-s)',
-        padding: '64px 24px',
+        padding: '36px 24px',
       }}>
         <div style={{ maxWidth: 1100, margin: '0 auto' }}>
           <p style={{ fontSize: 11, fontWeight: 600, letterSpacing: '0.08em', textTransform: 'uppercase', color: 'var(--forge)', textAlign: 'center', marginBottom: 10 }}>Process</p>
           <h2 style={{
             fontFamily: "'Outfit', system-ui, sans-serif",
             fontSize: 28, fontWeight: 800, letterSpacing: '-0.025em',
-            textAlign: 'center', marginBottom: 36, color: 'var(--ink-1)',
+            textAlign: 'center', marginBottom: 22, color: 'var(--ink-1)',
           }}>
             Brief in. Campaign out.
           </h2>
@@ -476,7 +476,7 @@ export default function HomePage() {
                 viewport={{ once: true }}
                 transition={{ delay: i * 0.1, duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
                 style={{
-                  padding: '22px 22px 26px',
+                  padding: '14px 16px 18px',
                   background: 'var(--bg-raised)',
                   border: '1px solid var(--border-d)',
                   borderRadius: 14,
