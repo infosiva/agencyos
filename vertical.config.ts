@@ -133,6 +133,28 @@ Be warm, empathetic, and reassuring — families are often stressed.`,
 
 export default config
 
+export const ROOM_TYPES = [
+  { id: 'living-room',  icon: '🛋️', label: 'Living Room' },
+  { id: 'bedroom',      icon: '🛏️', label: 'Bedroom' },
+  { id: 'kitchen',      icon: '🍳', label: 'Kitchen' },
+  { id: 'bathroom',     icon: '🚿', label: 'Bathroom' },
+  { id: 'home-office',  icon: '💻', label: 'Home Office' },
+  { id: 'dining-room',  icon: '🍽️', label: 'Dining Room' },
+  { id: 'garden',       icon: '🌿', label: 'Garden' },
+  { id: 'hallway',      icon: '🚪', label: 'Hallway' },
+]
+
+export const DESIGN_STYLES = [
+  { id: 'modern',        emoji: '⬜', label: 'Modern' },
+  { id: 'scandinavian',  emoji: '🪵', label: 'Scandinavian' },
+  { id: 'industrial',    emoji: '🔩', label: 'Industrial' },
+  { id: 'bohemian',      emoji: '🌸', label: 'Bohemian' },
+  { id: 'minimalist',    emoji: '◻️', label: 'Minimalist' },
+  { id: 'traditional',   emoji: '🏺', label: 'Traditional' },
+  { id: 'art-deco',      emoji: '✨', label: 'Art Deco' },
+  { id: 'coastal',       emoji: '🌊', label: 'Coastal' },
+]
+
 // ════════════════════════════════════════════════════════════
 // OTHER VERTICALS (copy + swap the export above)
 // ════════════════════════════════════════════════════════════
