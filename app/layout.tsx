@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
 import './globals.css'
 import Script from 'next/script'
-import ChatBot from '@/components/ChatBot'
+import FloatingChatWrapper from '@/components/FloatingChatWrapper'
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://agencyos.vercel.app'),
@@ -89,7 +89,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           {children}
         </main>
         <Script defer data-site="agencyos.vercel.app" src="http://31.97.56.148:3098/t.js" strategy="afterInteractive" />
-        <ChatBot />
+        <FloatingChatWrapper />
       </body>
     </html>
   )
