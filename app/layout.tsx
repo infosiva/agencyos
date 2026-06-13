@@ -4,14 +4,21 @@ import Script from 'next/script'
 import FloatingChatWrapper from '@/components/FloatingChatWrapper'
 
 export const metadata: Metadata = {
-  metadataBase: new URL('https://agencyos.vercel.app'),
-  title: 'AgencyOS — Run a Full AI Agency with Zero Employees',
-  description: 'One brief. Blog + podcast + faceless video + LinkedIn + emails + clips + client report — all in 90 seconds. Replace 6 tools with one. Free to start.',
-  keywords: ['AI content agency', 'zero employee agency', 'faceless video AI', 'AI podcast generator', 'content automation', 'agency automation'],
+  metadataBase: new URL('https://agencyos.app'),
+  title: 'AgencyOS — AI Content Agency Platform',
+  description: 'Run your content agency on AI. Brief → blog, podcast, video, LinkedIn, emails, clips and client report in 90 seconds. Manage unlimited clients. Free to start.',
+  keywords: ['AI content agency', 'content agency platform', 'AI blog writer', 'social media AI', 'content automation tool', 'agency workflow software'],
   openGraph: {
-    title: 'AgencyOS — Zero-Employee AI Content Agency',
-    description: 'One brief → 7 AI outputs in 90 seconds. Blog, podcast, video, LinkedIn, emails, clips, client report.',
+    title: 'AgencyOS — AI Content Agency Platform',
+    description: 'Brief → research → draft → schedule. AI handles the heavy lifting so your team ships 10x more content.',
     type: 'website',
+    images: [{ url: '/og.png', width: 1200, height: 630, alt: 'AgencyOS — AI Content Agency Platform' }],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'AgencyOS — AI Content Agency Platform',
+    description: 'Brief → blog, podcast, video, LinkedIn, emails, clips in 90 seconds.',
+    images: ['/og.png'],
   },
   icons: {
     icon: "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>",
@@ -22,6 +29,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en">
       <head>
+        <meta name="google-adsense-account" content="ca-pub-REPLACE_WITH_PUBLISHER_ID" />
         <Script
           id="structured-data"
           type="application/ld+json"

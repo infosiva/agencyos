@@ -222,7 +222,7 @@ export default function HomePage() {
           }}
         >
           Run a Full AI Agency<br />
-          <span style={{ background: 'linear-gradient(135deg, #6366f1 0%, #06b6d4 100%)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
+          <span style={{ background: 'linear-gradient(135deg, #0284c7 0%, #0ea5e9 50%, #38bdf8 100%)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
             With Zero Employees
           </span>
         </motion.h1>
@@ -365,7 +365,7 @@ export default function HomePage() {
 
       {/* ── Opportunity Research Agent ── */}
       <section style={{ maxWidth: 1100, margin: '0 auto', padding: '0 24px 80px', position: 'relative', zIndex: 10 }}>
-        <div className="card-aos" style={{ padding: '40px', borderColor: 'rgba(99,102,241,0.2)' }}>
+        <div className="card-aos" style={{ padding: '40px', borderColor: 'rgba(14,165,233,0.2)' }}>
           <div style={{ display: 'flex', flexWrap: 'wrap', gap: 40, alignItems: 'flex-start' }}>
             <div style={{ flex: '1 1 300px' }}>
               <span className="badge-aos" style={{ marginBottom: 16, display: 'inline-flex' }}>
@@ -456,7 +456,7 @@ export default function HomePage() {
         <div className="card-aos" style={{ overflow: 'hidden' }}>
           <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 14 }}>
             <thead>
-              <tr style={{ background: 'rgba(99,102,241,0.06)' }}>
+              <tr style={{ background: 'rgba(14,165,233,0.06)' }}>
                 <th style={{ padding: '14px 20px', textAlign: 'left', color: 'var(--ink-3)', fontWeight: 600, fontSize: 12, letterSpacing: '0.06em', textTransform: 'uppercase', borderBottom: '1px solid var(--border-s)' }}>Tool</th>
                 <th style={{ padding: '14px 20px', textAlign: 'left', color: 'var(--ink-3)', fontWeight: 600, fontSize: 12, letterSpacing: '0.06em', textTransform: 'uppercase', borderBottom: '1px solid var(--border-s)' }}>Price</th>
                 <th style={{ padding: '14px 20px', textAlign: 'left', color: 'var(--ink-3)', fontWeight: 600, fontSize: 12, letterSpacing: '0.06em', textTransform: 'uppercase', borderBottom: '1px solid var(--border-s)' }}>What it does</th>
@@ -465,7 +465,7 @@ export default function HomePage() {
             </thead>
             <tbody>
               {COMPETITORS.map((c, i) => (
-                <tr key={c.name} style={{ borderBottom: i < COMPETITORS.length - 1 ? '1px solid var(--border-s)' : 'none', background: c.name === 'AgencyOS' ? 'rgba(99,102,241,0.06)' : 'transparent' }}>
+                <tr key={c.name} style={{ borderBottom: i < COMPETITORS.length - 1 ? '1px solid var(--border-s)' : 'none', background: c.name === 'AgencyOS' ? 'rgba(14,165,233,0.06)' : 'transparent' }}>
                   <td style={{ padding: '14px 20px', fontWeight: c.name === 'AgencyOS' ? 700 : 500, color: c.name === 'AgencyOS' ? 'var(--aos-2)' : 'var(--ink-1)' }}>{c.name}</td>
                   <td style={{ padding: '14px 20px', color: c.name === 'AgencyOS' ? 'var(--emerald)' : 'var(--ink-2)' }}>{c.price}</td>
                   <td style={{ padding: '14px 20px', color: 'var(--ink-2)', maxWidth: 260 }}>{c.does}</td>
@@ -570,8 +570,8 @@ export default function HomePage() {
               className="card-aos"
               style={{
                 padding: '28px',
-                borderColor: p.primary ? 'rgba(99,102,241,0.35)' : undefined,
-                boxShadow: p.primary ? '0 0 40px rgba(99,102,241,0.12)' : undefined,
+                borderColor: p.primary ? 'rgba(14,165,233,0.35)' : undefined,
+                boxShadow: p.primary ? '0 0 40px rgba(14,165,233,0.12)' : undefined,
                 position: 'relative',
               }}
             >

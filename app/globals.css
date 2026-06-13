@@ -10,18 +10,18 @@ html {
 }
 
 :root {
-  /* AgencyOS brand */
-  --aos:       #6366f1;
-  --aos-2:     #818cf8;
-  --aos-dim:   rgba(99,102,241,0.12);
-  --cyan:      #06b6d4;
-  --cyan-dim:  rgba(6,182,212,0.10);
+  /* AgencyOS brand — sky blue / dark navy */
+  --aos:       #0ea5e9;
+  --aos-2:     #38bdf8;
+  --aos-dim:   rgba(14,165,233,0.12);
+  --cyan:      #22d3ee;
+  --cyan-dim:  rgba(34,211,238,0.10);
   --emerald:   #10b981;
 
-  /* Surfaces */
-  --bg:        #050509;
-  --bg-raised: #0c0c14;
-  --bg-card:   rgba(12,12,20,0.60);
+  /* Surfaces — dark navy */
+  --bg:        #0f172a;
+  --bg-raised: #1e293b;
+  --bg-card:   rgba(15,23,42,0.70);
 
   /* Text */
   --ink-1: #eef0ff;
@@ -57,8 +57,8 @@ body {
   inset: 0;
   z-index: 0;
   background:
-    radial-gradient(ellipse 80% 60% at 50% -10%, rgba(99,102,241,0.18) 0%, transparent 60%),
-    radial-gradient(ellipse 60% 40% at 80% 80%, rgba(6,182,212,0.10) 0%, transparent 55%),
+    radial-gradient(ellipse 80% 60% at 50% -10%, rgba(14,165,233,0.18) 0%, transparent 60%),
+    radial-gradient(ellipse 60% 40% at 80% 80%, rgba(34,211,238,0.10) 0%, transparent 55%),
     var(--bg);
   pointer-events: none;
 }
@@ -66,7 +66,7 @@ body {
   content: '';
   position: absolute;
   inset: 0;
-  background-image: radial-gradient(rgba(99,102,241,0.08) 1px, transparent 1px);
+  background-image: radial-gradient(rgba(14,165,233,0.07) 1px, transparent 1px);
   background-size: 32px 32px;
 }
 
@@ -79,9 +79,9 @@ body {
   animation: orbDrift 18s ease-in-out infinite alternate;
   z-index: 0;
 }
-.orb-1 { width: 520px; height: 520px; background: rgba(99,102,241,0.18); top: -120px; left: -100px; animation-duration: 20s; }
-.orb-2 { width: 380px; height: 380px; background: rgba(6,182,212,0.14); bottom: -80px; right: -80px; animation-duration: 16s; animation-direction: alternate-reverse; }
-.orb-3 { width: 280px; height: 280px; background: rgba(16,185,129,0.10); top: 40%; left: 60%; animation-duration: 24s; }
+.orb-1 { width: 520px; height: 520px; background: rgba(14,165,233,0.16); top: -120px; left: -100px; animation-duration: 20s; }
+.orb-2 { width: 380px; height: 380px; background: rgba(34,211,238,0.12); bottom: -80px; right: -80px; animation-duration: 16s; animation-direction: alternate-reverse; }
+.orb-3 { width: 280px; height: 280px; background: rgba(56,189,248,0.08); top: 40%; left: 60%; animation-duration: 24s; }
 
 @keyframes orbDrift {
   from { transform: translate(0, 0) scale(1); }
@@ -106,8 +106,8 @@ body {
   transition: border-color 220ms, box-shadow 220ms;
 }
 .card-aos:hover {
-  border-color: rgba(99,102,241,0.25);
-  box-shadow: 0 0 0 1px rgba(99,102,241,0.10), 0 8px 32px rgba(0,0,0,0.4);
+  border-color: rgba(14,165,233,0.25);
+  box-shadow: 0 0 0 1px rgba(14,165,233,0.10), 0 8px 32px rgba(0,0,0,0.4);
 }
 
 /* ── Inputs ── */
@@ -135,7 +135,7 @@ body {
   align-items: center;
   justify-content: center;
   gap: 8px;
-  background: linear-gradient(135deg, #6366f1 0%, #818cf8 100%);
+  background: linear-gradient(135deg, #0284c7 0%, #0ea5e9 50%, #38bdf8 100%);
   color: #fff;
   font-family: 'Outfit', sans-serif;
   font-weight: 700;
@@ -158,8 +158,8 @@ body {
   transition: transform 500ms;
 }
 .btn-aos:hover::before { transform: translateX(100%); }
-.btn-aos:hover { box-shadow: 0 0 28px rgba(99,102,241,0.45); transform: translateY(-1px); }
-.btn-aos:active { transform: translateY(0); }
+.btn-aos:hover { box-shadow: 0 0 28px rgba(14,165,233,0.45); transform: translateY(-1px); }
+.btn-aos:active { transform: scale(0.97); transform: translateY(0); }
 .btn-aos:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
 
 /* ── Secondary / ghost ── */
@@ -184,7 +184,7 @@ body {
   align-items: center;
   gap: 6px;
   background: var(--aos-dim);
-  border: 1px solid rgba(99,102,241,0.22);
+  border: 1px solid rgba(14,165,233,0.22);
   border-radius: 100px;
   color: var(--aos-2);
   font-size: 12px;
@@ -194,7 +194,7 @@ body {
 }
 .badge-cyan {
   background: var(--cyan-dim);
-  border-color: rgba(6,182,212,0.22);
+  border-color: rgba(34,211,238,0.22);
   color: var(--cyan);
 }
 .badge-green {
@@ -210,7 +210,7 @@ body {
   justify-content: center;
   width: 32px;
   height: 32px;
-  background: linear-gradient(135deg, #6366f1, #06b6d4);
+  background: linear-gradient(135deg, #0284c7, #0ea5e9);
   border-radius: 8px;
 }
 .nav-link {

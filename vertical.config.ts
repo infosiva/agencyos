@@ -69,66 +69,64 @@ export interface Category {
 // ════════════════════════════════════════════════════════════
 
 const config: VerticalConfig = {
-  // ── Elder Care ───────────────────────────────────────────
-  id:         'eldercare',
-  name:       'ElderCare+',
-  tagline:    'Trusted carers for your loved ones — found in minutes, not days',
-  domain:     'eldercare.plus',
-  themeColor: 'violet',
+  // ── AgencyOS — AI Content Agency Platform ────────────────
+  id:         'agencyos',
+  name:       'AgencyOS',
+  tagline:    'Brief → research → draft → schedule. AI handles the heavy lifting so your team ships 10x more content.',
+  domain:     'agencyos.app',
+  themeColor: 'blue',
 
-  providerLabel:  'Carer',
-  providerPlural: 'Carers',
-  consumerLabel:  'Family',
+  providerLabel:  'Creator',
+  providerPlural: 'Creators',
+  consumerLabel:  'Client',
 
   categories: [
-    { id: 'companionship',  label: 'Companionship',       icon: '🤝', desc: 'Social visits, conversation, light outings' },
-    { id: 'personal-care',  label: 'Personal Care',       icon: '🛁', desc: 'Bathing, dressing, hygiene assistance' },
-    { id: 'dementia',       label: 'Dementia Support',    icon: '🧠', desc: 'Specialist memory care at home' },
-    { id: 'medication',     label: 'Medication Prompts',  icon: '💊', desc: 'Reminders, administration support' },
-    { id: 'mobility',       label: 'Mobility Assistance', icon: '🦽', desc: 'Transfers, exercise, fall prevention' },
-    { id: 'night-care',     label: 'Overnight / Live-in', icon: '🌙', desc: '24hr or night-shift live-in care' },
-    { id: 'post-hospital',  label: 'Post-Hospital Care',  icon: '🏥', desc: 'Recovery support after discharge' },
-    { id: 'end-of-life',    label: 'Palliative Support',  icon: '🕊️', desc: 'Compassionate end-of-life companionship' },
+    { id: 'blog-seo',       label: 'Blog / SEO Article',   icon: '📝', desc: '1,200-word SEO article with meta + headings in 90 seconds' },
+    { id: 'podcast',        label: 'Podcast Episode',       icon: '🎙️', desc: 'Hook + outline + full script + show notes' },
+    { id: 'faceless-video', label: 'Faceless Video',        icon: '🎬', desc: 'AI voiceover script + B-roll scene prompts' },
+    { id: 'linkedin',       label: 'LinkedIn Posts',        icon: '💼', desc: '3 posts — thought leader, hook bait, carousel' },
+    { id: 'email',          label: 'Email Sequence',        icon: '📧', desc: '5-email nurture — welcome → educate → convert' },
+    { id: 'clips',          label: 'Short Clips',           icon: '✂️', desc: '10 Reels/TikTok captions with hook formulas' },
+    { id: 'report',         label: 'Client Report',         icon: '📊', desc: 'Strategy deck + 30-day content calendar' },
+    { id: 'research',       label: 'Opportunity Research',  icon: '🔍', desc: 'Trend Scout + Gap Analyzer + Client Finder agent' },
   ],
 
-  pricingModel:        'hourly',
-  bookingFlow:         'consult_first',
-  minPrice:            15,
-  maxPrice:            40,
-  sessionMinutes:      60,
-  platformFeePercent:  12,
+  pricingModel:        'fixed',
+  bookingFlow:         'instant',
+  minPrice:            0,
+  maxPrice:            99,
+  sessionMinutes:      90,
+  platformFeePercent:  0,
 
-  aiSystemPrompt: `You are a compassionate care coordinator for ElderCare+.
-Help families find the right carer for their elderly relative.
-Ask about: the person's age, main challenges, preferred schedule,
-personality (quiet/social), whether they have dementia or mobility issues,
-and whether family can be present during visits.
-Never give medical advice. Always recommend consulting a GP.
-Be warm, empathetic, and reassuring — families are often stressed.`,
+  aiSystemPrompt: `You are an AI content strategist for AgencyOS, an AI-native content agency platform.
+Help users create high-quality content across all formats: blog posts, podcasts, video scripts, LinkedIn posts, email sequences, short clips, and client reports.
+Ask about: the brand name, target audience, topic or angle, preferred tone (professional/casual/bold), and which formats they need.
+Focus on content agency workflows — briefs, client management, content calendars, and AI-generated drafts.
+Be direct and results-focused. Agencies value speed and quality.`,
 
   aiMatchHints: [
-    'dementia certification', 'moving and handling trained',
-    'first aid', 'palliative care experience', 'live-in experience',
-    'driving licence', 'same-gender preference',
+    'content strategy', 'SEO writing', 'social media copywriting',
+    'podcast scripting', 'email marketing', 'video scripting',
+    'LinkedIn thought leadership', 'content calendar management',
   ],
 
   features: {
-    backgroundCheck:  true,
+    backgroundCheck:  false,
     portfolioPhotos:  true,
-    videoIntro:       true,
-    instantBook:      false,
+    videoIntro:       false,
+    instantBook:      true,
     recurringBook:    true,
-    homeVisit:        true,
-    remoteSession:    false,
-    groupSession:     false,
-    insuranceBadge:   true,
+    homeVisit:        false,
+    remoteSession:    true,
+    groupSession:     true,
+    insuranceBadge:   false,
     aiDiagnosis:      false,
-    careJournal:      true,
+    careJournal:      false,
   },
 
-  metaTitle:       'ElderCare+ — Find Trusted Home Carers Near You',
-  metaDescription: 'AI-matched home carers for older adults. Background-checked, insured, reviewed by real families. Book a free consultation today.',
-  keywords:        ['home carer', 'elder care', 'elderly care at home', 'dementia carer', 'live-in carer'],
+  metaTitle:       'AgencyOS — AI Content Agency Platform',
+  metaDescription: 'Run your content agency on AI. Brief to blog, podcast, video, LinkedIn, emails, and client report in 90 seconds. Free to start.',
+  keywords:        ['AI content agency', 'content agency platform', 'AI blog writer', 'social media AI', 'content automation tool'],
 }
 
 export default config
