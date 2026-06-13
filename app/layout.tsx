@@ -29,7 +29,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en">
       <head>
-        <meta name="google-adsense-account" content="ca-pub-REPLACE_WITH_PUBLISHER_ID" />
+        <meta name="google-adsense-account" content="ca-pub-4237294630161176" />
         <Script
           id="structured-data"
           type="application/ld+json"

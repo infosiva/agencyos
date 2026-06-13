@@ -7,8 +7,61 @@ import {
   Mic, Video, FileText, Mail, Share2, Scissors,
   BarChart3, ArrowRight, Loader2, ChevronDown, ChevronUp,
   Zap, Globe, Clock, Search, TrendingUp, Target,
-  Briefcase, Palette, Layout, Check, X,
+  Briefcase, Palette, Layout, Check, X, Users, FolderOpen, FileBarChart, UserCircle,
 } from 'lucide-react'
+
+// ── Dashboard stats (localStorage) ──────────────────────────
+function useDashStats() {
+  const [stats, setStats] = useState({ clients: 0, projects: 0, reports: 0, members: 0 })
+  useEffect(() => {
+    try {
+      const stored = JSON.parse(localStorage.getItem('ao_stats') || '{}')
+      setStats({
+        clients: stored.clients ?? 12,
+        projects: stored.projects ?? 34,
+        reports: stored.reports ?? 87,
+        members: stored.members ?? 5,
+      })
+    } catch { /* ignore */ }
+  }, [])
+  return stats
+}
+
+function DashboardStats() {
+  const stats = useDashStats()
+  const items = [
+    { icon: UserCircle, label: 'Clients',            val: stats.clients,  color: 'var(--aos)' },
+    { icon: FolderOpen, label: 'Active Projects',    val: stats.projects, color: 'var(--cyan)' },
+    { icon: FileBarChart, label: 'Reports Generated', val: stats.reports,  color: '#a78bfa' },
+    { icon: Users,      label: 'Team Members',       val: stats.members,  color: '#34d399' },
+  ]
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 16 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ delay: 0.3, duration: 0.5 }}
+      style={{
+        maxWidth: 860, margin: '0 auto 40px', padding: '0 24px',
+        display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 12,
+        position: 'relative', zIndex: 10,
+      }}
+      className="aos-stats-strip"
+    >
+      {items.map(({ icon: Icon, label, val, color }) => (
+        <div key={label} className="glass" style={{ padding: '16px 20px', display: 'flex', alignItems: 'center', gap: 14 }}>
+          <div style={{ width: 36, height: 36, borderRadius: 9, background: `${color}18`, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+            <Icon size={17} color={color} />
+          </div>
+          <div>
+            <div style={{ fontFamily: "'Outfit', sans-serif", fontWeight: 800, fontSize: 22, color: 'var(--ink-1)', lineHeight: 1 }}>{val}</div>
+            <div style={{ fontSize: 11, color: 'var(--ink-3)', marginTop: 2 }}>{label}</div>
+          </div>
+        </div>
+      ))}
+      <style>{`@media (max-width: 600px) { .aos-stats-strip { grid-template-columns: repeat(2, 1fr) !important; } }`}</style>
+    </motion.div>
+  )
+}
 
 // ── Output definitions ───────────────────────────────────────
 const OUTPUTS = [
@@ -221,9 +274,9 @@ export default function HomePage() {
             margin: '0 0 24px',
           }}
         >
-          Run a Full AI Agency<br />
-          <span style={{ background: 'linear-gradient(135deg, #0284c7 0%, #0ea5e9 50%, #38bdf8 100%)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
-            With Zero Employees
+          Run your agency on AI —<br />
+          <span style={{ background: 'linear-gradient(135deg, #6366f1 0%, #06b6d4 100%)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
+            client reports, projects, team ops
           </span>
         </motion.h1>
 
@@ -233,8 +286,7 @@ export default function HomePage() {
           transition={{ delay: 0.2, duration: 0.5 }}
           style={{ color: 'var(--ink-2)', fontSize: 18, lineHeight: 1.65, maxWidth: 600, margin: '0 auto 48px' }}
         >
-          One brief → blog + podcast + faceless video + LinkedIn + emails + Reels + client report.
-          In 90 seconds. No team. No agency fees.
+          AI that writes client updates, tracks project health, and keeps your team aligned — automatically. One platform. No agency fees.
         </motion.p>
 
         {/* Stats row */}
@@ -330,6 +382,32 @@ export default function HomePage() {
         </motion.div>
       </section>
 
+      {/* ── Dashboard stats ── */}
+      <DashboardStats />
+
+      {/* ── Generate client report CTA ── */}
+      <motion.div
+        initial={{ opacity: 0, y: 16 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.4, duration: 0.5 }}
+        style={{ maxWidth: 860, margin: '0 auto 60px', padding: '0 24px', position: 'relative', zIndex: 10, textAlign: 'center' }}
+      >
+        <div className="card-aos" style={{ padding: '28px 32px', display: 'flex', flexWrap: 'wrap', alignItems: 'center', justifyContent: 'space-between', gap: 20, borderColor: 'rgba(99,102,241,0.25)' }}>
+          <div style={{ textAlign: 'left' }}>
+            <div style={{ fontFamily: "'Outfit', sans-serif", fontWeight: 800, fontSize: 18, color: 'var(--ink-1)', marginBottom: 4 }}>
+              Generate a client report — instantly
+            </div>
+            <div style={{ color: 'var(--ink-3)', fontSize: 13, maxWidth: 420 }}>
+              AI writes a full white-label client update with project status, next steps, and KPIs. Ready in 30 seconds.
+            </div>
+          </div>
+          <button className="btn-aos" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })} style={{ flexShrink: 0 }}>
+            <BarChart3 size={15} />
+            Generate Client Report
+          </button>
+        </div>
+      </motion.div>
+
       {/* ── Outputs grid ── */}
       <section id="outputs" style={{ maxWidth: 1100, margin: '0 auto', padding: '80px 24px', position: 'relative', zIndex: 10 }}>
         <div style={{ textAlign: 'center', marginBottom: 48 }}>
@@ -365,7 +443,7 @@ export default function HomePage() {
 
       {/* ── Opportunity Research Agent ── */}
       <section style={{ maxWidth: 1100, margin: '0 auto', padding: '0 24px 80px', position: 'relative', zIndex: 10 }}>
-        <div className="card-aos" style={{ padding: '40px', borderColor: 'rgba(14,165,233,0.2)' }}>
+        <div className="card-aos" style={{ padding: '40px', borderColor: 'rgba(99,102,241,0.2)' }}>
           <div style={{ display: 'flex', flexWrap: 'wrap', gap: 40, alignItems: 'flex-start' }}>
             <div style={{ flex: '1 1 300px' }}>
               <span className="badge-aos" style={{ marginBottom: 16, display: 'inline-flex' }}>
@@ -456,7 +534,7 @@ export default function HomePage() {
         <div className="card-aos" style={{ overflow: 'hidden' }}>
           <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 14 }}>
             <thead>
-              <tr style={{ background: 'rgba(14,165,233,0.06)' }}>
+              <tr style={{ background: 'rgba(99,102,241,0.06)' }}>
                 <th style={{ padding: '14px 20px', textAlign: 'left', color: 'var(--ink-3)', fontWeight: 600, fontSize: 12, letterSpacing: '0.06em', textTransform: 'uppercase', borderBottom: '1px solid var(--border-s)' }}>Tool</th>
                 <th style={{ padding: '14px 20px', textAlign: 'left', color: 'var(--ink-3)', fontWeight: 600, fontSize: 12, letterSpacing: '0.06em', textTransform: 'uppercase', borderBottom: '1px solid var(--border-s)' }}>Price</th>
                 <th style={{ padding: '14px 20px', textAlign: 'left', color: 'var(--ink-3)', fontWeight: 600, fontSize: 12, letterSpacing: '0.06em', textTransform: 'uppercase', borderBottom: '1px solid var(--border-s)' }}>What it does</th>
@@ -465,7 +543,7 @@ export default function HomePage() {
             </thead>
             <tbody>
               {COMPETITORS.map((c, i) => (
-                <tr key={c.name} style={{ borderBottom: i < COMPETITORS.length - 1 ? '1px solid var(--border-s)' : 'none', background: c.name === 'AgencyOS' ? 'rgba(14,165,233,0.06)' : 'transparent' }}>
+                <tr key={c.name} style={{ borderBottom: i < COMPETITORS.length - 1 ? '1px solid var(--border-s)' : 'none', background: c.name === 'AgencyOS' ? 'rgba(99,102,241,0.06)' : 'transparent' }}>
                   <td style={{ padding: '14px 20px', fontWeight: c.name === 'AgencyOS' ? 700 : 500, color: c.name === 'AgencyOS' ? 'var(--aos-2)' : 'var(--ink-1)' }}>{c.name}</td>
                   <td style={{ padding: '14px 20px', color: c.name === 'AgencyOS' ? 'var(--emerald)' : 'var(--ink-2)' }}>{c.price}</td>
                   <td style={{ padding: '14px 20px', color: 'var(--ink-2)', maxWidth: 260 }}>{c.does}</td>
@@ -570,8 +648,8 @@ export default function HomePage() {
               className="card-aos"
               style={{
                 padding: '28px',
-                borderColor: p.primary ? 'rgba(14,165,233,0.35)' : undefined,
-                boxShadow: p.primary ? '0 0 40px rgba(14,165,233,0.12)' : undefined,
+                borderColor: p.primary ? 'rgba(99,102,241,0.35)' : undefined,
+                boxShadow: p.primary ? '0 0 40px rgba(99,102,241,0.12)' : undefined,
                 position: 'relative',
               }}
             >
