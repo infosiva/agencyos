@@ -212,6 +212,17 @@ export default function HomePage() {
   const [loading, setLoading] = useState(false)
   const [stepIdx, setStepIdx] = useState(0)
   const [error, setError] = useState('')
+  const [showPromo, setShowPromo] = useState(false)
+  const [promoCode, setPromoCode] = useState('')
+  const [promoMsg, setPromoMsg] = useState('')
+
+  const handlePromo = async (e: React.FormEvent) => {
+    e.preventDefault()
+    const res = await fetch('/api/promo', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ code: promoCode }) })
+    const data = await res.json()
+    setPromoMsg(data.valid ? `✓ ${data.daysUnlocked}d Pro unlocked!` : 'Invalid code')
+    setTimeout(() => setPromoMsg(''), 3000)
+  }
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
@@ -378,6 +389,19 @@ export default function HomePage() {
                 <p style={{ color: 'var(--ink-3)', fontSize: 12, textAlign: 'center', margin: 0 }}>
                   No account required. Results in ~90 seconds.
                 </p>
+                <div style={{ textAlign: 'center', marginTop: 4 }}>
+                  <button type="button" onClick={() => setShowPromo(p => !p)} style={{ fontSize: 11, color: 'var(--ink-3)', background: 'none', border: 'none', cursor: 'pointer', textDecoration: 'underline' }}>
+                    Have a promo code?
+                  </button>
+                  {showPromo && (
+                    <form onSubmit={handlePromo} style={{ display: 'flex', gap: 8, justifyContent: 'center', marginTop: 6 }}>
+                      <input value={promoCode} onChange={e => setPromoCode(e.target.value)} placeholder="Enter code" style={{ fontSize: 12, padding: '4px 10px', borderRadius: 8, border: '1px solid rgba(255,255,255,0.15)', background: 'rgba(255,255,255,0.07)', color: 'var(--ink-1)', width: 130 }} />
+                      <button type="submit" style={{ fontSize: 12, padding: '4px 12px', borderRadius: 8, background: 'rgba(255,255,255,0.10)', border: '1px solid rgba(255,255,255,0.15)', cursor: 'pointer', color: 'var(--ink-1)' }}>
+                        {promoMsg || 'Apply'}
+                      </button>
+                    </form>
+                  )}
+                </div>
               </motion.form>
             )}
           </AnimatePresence>
