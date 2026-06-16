@@ -17,10 +17,10 @@ function useDashStats() {
     try {
       const stored = JSON.parse(localStorage.getItem('ao_stats') || '{}')
       setStats({
-        clients: stored.clients ?? 12,
-        projects: stored.projects ?? 34,
-        reports: stored.reports ?? 87,
-        members: stored.members ?? 5,
+        clients: stored.clients ?? 0,
+        projects: stored.projects ?? 0,
+        reports: stored.reports ?? 0,
+        members: stored.members ?? 0,
       })
     } catch { /* ignore */ }
   }, [])
@@ -29,6 +29,8 @@ function useDashStats() {
 
 function DashboardStats() {
   const stats = useDashStats()
+  const hasData = stats.clients > 0 || stats.projects > 0 || stats.reports > 0 || stats.members > 0
+  if (!hasData) return null
   const items = [
     { icon: UserCircle, label: 'Clients',            val: stats.clients,  color: 'var(--aos)' },
     { icon: FolderOpen, label: 'Active Projects',    val: stats.projects, color: 'var(--cyan)' },
