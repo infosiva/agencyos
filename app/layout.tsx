@@ -99,7 +99,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         </main>
         <Script defer data-site="agencyos.vercel.app" src="http://31.97.56.148:3098/t.js" strategy="afterInteractive" />
         <FloatingChatWrapper />
-        <FeedbackWidget siteName="AgencyOS" />
+        <FeedbackWidget siteName="AgencyOS" position="left" />
       </body>
     </html>
   )
