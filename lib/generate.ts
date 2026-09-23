@@ -1,21 +1,9 @@
-import Groq from 'groq-sdk'
 import { ContentBrief, AgencyResult, BlogPost, PodcastEpisode, VideoStoryboard, EmailSequence, LinkedInPosts, ShortClips, ClientReport } from './types'
 import { randomUUID } from 'crypto'
-
-let _groq: Groq | null = null
-function groq(): Groq {
-  if (!_groq) _groq = new Groq({ apiKey: process.env.GROQ_API_KEY! })
-  return _groq
-}
+import { aiChat } from './ai'
 
 async function ask(prompt: string, system: string, maxTokens = 2000): Promise<string> {
-  const res = await groq().chat.completions.create({
-    model: 'llama-3.3-70b-versatile',
-    messages: [{ role: 'system', content: system }, { role: 'user', content: prompt }],
-    max_tokens: maxTokens,
-    temperature: 0.75,
-  })
-  return res.choices[0]?.message?.content ?? '{}'
+  return aiChat([{ role: 'user', content: prompt }], system, maxTokens, 'best')
 }
 
 function parseJSON<T>(raw: string, fallback: T): T {
