@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
-import { motion } from 'framer-motion'
+import { motion, AnimatePresence } from 'framer-motion'
 import { MagneticButton } from '@infosiva/shared-ui/modern'
 import {
   Mic, Video, FileText, Mail, Share2, Scissors,
@@ -320,22 +320,8 @@ export default function HomePage() {
               <div style={{ fontFamily: "'Outfit', sans-serif", fontWeight: 800, fontSize: 28, color: 'var(--ink-1)', lineHeight: 1 }}>{s.val}</div>
               <div style={{ color: 'var(--ink-3)', fontSize: 12, marginTop: 4 }}>{s.label}</div>
             </div>
-            <MagneticButton
-              type="submit"
-              className="inline-flex items-center gap-2 px-6 py-3.5 rounded-xl font-semibold text-white transition-transform active:scale-[0.97]"
-              style={{ background: 'var(--aos)' }}
-            >
-              Find {config.providerPlural} <ArrowRight size={16} />
-            </MagneticButton>
-          </motion.form>
-
-          {(stats.families > 0 || stats.matches > 0) && (
-            <div className="flex gap-6 text-sm" style={{ color: 'var(--ink-3)' }}>
-              {stats.families > 0 && <span>{stats.families} families matched</span>}
-              {stats.matches > 0 && <span>{stats.matches} carer conversations started</span>}
-            </div>
-          )}
-        </div>
+          ))}
+        </motion.div>
 
         {/* ── Brief form ── */}
         <motion.div
@@ -397,10 +383,10 @@ export default function HomePage() {
                   <input className="input" placeholder="e.g. SaaS founders, 25–45" value={audience} onChange={e => setAudience(e.target.value)} required />
                 </div>
                 {error && <p style={{ color: '#f87171', fontSize: 13, margin: 0 }}>{error}</p>}
-                <button type="submit" className="btn-aos" style={{ width: '100%', marginTop: 4, justifyContent: 'center' }}>
+                <MagneticButton type="submit" className="btn-aos" style={{ width: '100%', marginTop: 4, justifyContent: 'center' }}>
                   Generate 7 outputs — free
                   <ArrowRight size={16} />
-                </button>
+                </MagneticButton>
                 <p style={{ color: 'var(--ink-3)', fontSize: 12, textAlign: 'center', margin: 0 }}>
                   No account required. Results in ~90 seconds.
                 </p>
