@@ -6,11 +6,9 @@ import config from '@/vertical.config'
 import Link from 'next/link'
 
 // Simulated conversation for the hero — plays through automatically
-const DEMO: { role: 'user' | 'ai'; text: string; delay: number }[] = [
-  { role: 'user', text: `I need a ${config.providerLabel.toLowerCase()} for my elderly mum, she has mild dementia`, delay: 600 },
-  { role: 'ai',   text: `Of course — I can help with that. How many hours per week would she need support, and is she based in London?`, delay: 1800 },
-  { role: 'user', text: 'About 3 hours a day, based in Richmond', delay: 2800 },
-  { role: 'ai',   text: `✨ I've found 8 dementia-specialist carers in Richmond with same-day availability. All DBS-checked.\n\nShall I show you the top 3 matches?`, delay: 4200 },
+const DEMO: { role: 'user' | 'ai'; text: string; delay: number }[] = config.demo ?? [
+  { role: 'user', text: `I need a ${config.providerLabel.toLowerCase()} — can you help?`, delay: 600 },
+  { role: 'ai',   text: `Of course. Tell me a bit about what you need and I'll shortlist the best ${config.providerPlural.toLowerCase()}.`, delay: 1800 },
 ]
 
 export default function HeroChatPreview() {
@@ -26,8 +24,8 @@ export default function HeroChatPreview() {
     <div className={`${theme.card} rounded-2xl overflow-hidden ${theme.glow} float`}>
       {/* Header */}
       <div className={`flex items-center gap-2 px-4 py-3 bg-gradient-to-r ${theme.gradient}`}>
-        <Sparkles size={16} className="text-white" />
-        <span className="font-semibold text-white text-sm">AI Matcher</span>
+        <Sparkles size={16} className="text-(--ink)" />
+        <span className="font-semibold text-(--ink) text-sm">{config.copy?.demoTitle ?? 'AI Matcher'}</span>
         <div className="ml-auto w-2 h-2 bg-green-400 rounded-full animate-pulse" />
       </div>
 
@@ -37,8 +35,8 @@ export default function HeroChatPreview() {
           <div key={i} className={`flex ${m.role === 'user' ? 'justify-end' : 'justify-start'}`}>
             <div className={`max-w-[85%] rounded-xl px-3.5 py-2.5 text-sm leading-relaxed whitespace-pre-line ${
               m.role === 'user'
-                ? `bg-gradient-to-r ${theme.gradient} text-white`
-                : 'glass text-white/85'
+                ? `${theme.gradient} text-(--on-accent)`
+                : 'glass text-[color-mix(in_oklab,var(--ink)_85%,transparent)]'
             }`}>
               {m.text}
             </div>
@@ -60,9 +58,9 @@ export default function HeroChatPreview() {
       <div className="px-4 pb-4">
         <Link
           href="/chat"
-          className={`block w-full text-center py-3 rounded-xl text-sm font-semibold bg-gradient-to-r ${theme.gradient} text-white hover:opacity-90 transition-opacity`}
+          className={`block w-full text-center py-3 rounded-xl text-sm font-semibold bg-gradient-to-r ${theme.gradient} text-(--ink) hover:opacity-90 transition-opacity`}
         >
-          Start your free match →
+          {config.copy?.demoCta ?? 'Start your free match →'}
         </Link>
       </div>
     </div>

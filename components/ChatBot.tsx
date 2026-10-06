@@ -3,7 +3,7 @@
 import { useState, useRef, useEffect, useCallback } from 'react'
 
 // KwizBot — violet theme, bottom-right, family quiz assistant
-const ACCENT = '#ec4899'
+const ACCENT = 'var(--accent)'
 const BOT_NAME = 'AgencyBot'
 const WELCOME = 'Hi! Ready to run your AI agency? Tell me what you need.'
 const SYSTEM_PROMPT = `You are KwizBot, the friendly AI assistant for Kwizzo — a fun family quiz game platform powered by AI.
@@ -115,8 +115,8 @@ export default function ChatBot() {
         <div style={{
           position: 'fixed', bottom: 88, right: 24, zIndex: 9998,
           width: 360, height: 500, borderRadius: 16,
-          background: '#0d0a1a', border: '1px solid rgba(124,58,237,0.25)',
-          boxShadow: '0 8px 40px rgba(0,0,0,0.7), 0 0 40px rgba(124,58,237,0.12)',
+          background: 'var(--surface-strong)', border: '1px solid color-mix(in oklab, var(--accent) 25%, transparent)',
+          boxShadow: '0 8px 40px var(--surface-strong), 0 0 40px color-mix(in oklab, var(--accent) 12%, transparent)',
           display: 'flex', flexDirection: 'column', overflow: 'hidden',
           animation: 'agency-slide-up 0.22s ease-out',
         }}>
@@ -127,22 +127,22 @@ export default function ChatBot() {
             }
             .agency-msg::-webkit-scrollbar { width: 4px; }
             .agency-msg::-webkit-scrollbar-track { background: transparent; }
-            .agency-msg::-webkit-scrollbar-thumb { background: rgba(124,58,237,0.3); border-radius: 2px; }
+            .agency-msg::-webkit-scrollbar-thumb { background: color-mix(in oklab, var(--accent) 30%, transparent); border-radius: 2px; }
             @keyframes agency-bounce { 0%,80%,100%{transform:translateY(0)} 40%{transform:translateY(-6px)} }
           `}</style>
 
           {/* Header */}
           <div style={{
-            padding: '12px 16px', borderBottom: '1px solid rgba(124,58,237,0.2)',
+            padding: '12px 16px', borderBottom: '1px solid color-mix(in oklab, var(--accent) 20%, transparent)',
             display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-            background: 'linear-gradient(135deg, rgba(124,58,237,0.2) 0%, rgba(91,33,182,0.1) 100%)',
+            background: 'linear-gradient(135deg, color-mix(in oklab, var(--accent) 20%, transparent) 0%, color-mix(in oklab, var(--accent) 10%, transparent) 100%)',
           }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
               <div style={{
                 width: 34, height: 34, borderRadius: '50%',
-                background: 'linear-gradient(135deg, #ec4899, #db2777)',
+                background: 'linear-gradient(135deg, var(--accent), var(--accent))',
                 display: 'flex', alignItems: 'center', justifyContent: 'center',
-                fontSize: 16, boxShadow: '0 0 12px rgba(124,58,237,0.5)',
+                fontSize: 16, boxShadow: '0 0 12px color-mix(in oklab, var(--accent) 50%, transparent)',
               }}>🏢</div>
               <div>
                 <div style={{ color: '#fff', fontWeight: 700, fontSize: 14 }}>{BOT_NAME}</div>
@@ -152,7 +152,7 @@ export default function ChatBot() {
                 </div>
               </div>
             </div>
-            <button onClick={() => setOpen(false)} style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'rgba(255,255,255,0.4)', padding: 4 }}>
+            <button onClick={() => setOpen(false)} style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'color-mix(in oklab, var(--ink) 40%, transparent)', padding: 4 }}>
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
                 <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
               </svg>
@@ -169,8 +169,8 @@ export default function ChatBot() {
                 <div style={{
                   maxWidth: '82%', padding: '9px 13px',
                   borderRadius: m.role === 'user' ? '16px 16px 4px 16px' : '16px 16px 16px 4px',
-                  background: m.role === 'user' ? 'linear-gradient(135deg, #ec4899, #db2777)' : 'rgba(124,58,237,0.1)',
-                  border: m.role === 'user' ? 'none' : '1px solid rgba(124,58,237,0.2)',
+                  background: m.role === 'user' ? 'linear-gradient(135deg, var(--accent), var(--accent))' : 'color-mix(in oklab, var(--accent) 10%, transparent)',
+                  border: m.role === 'user' ? 'none' : '1px solid color-mix(in oklab, var(--accent) 20%, transparent)',
                   color: '#f0f0f0', fontSize: 13.5, lineHeight: 1.5,
                   wordBreak: 'break-word', whiteSpace: 'pre-wrap',
                 }}>
@@ -183,7 +183,7 @@ export default function ChatBot() {
               <div style={{ display: 'flex', justifyContent: 'flex-start' }}>
                 <div style={{
                   padding: '10px 14px', borderRadius: '16px 16px 16px 4px',
-                  background: 'rgba(124,58,237,0.1)', border: '1px solid rgba(124,58,237,0.2)',
+                  background: 'color-mix(in oklab, var(--accent) 10%, transparent)', border: '1px solid color-mix(in oklab, var(--accent) 20%, transparent)',
                   display: 'flex', gap: 4, alignItems: 'center',
                 }}>
                   {[0, 1, 2].map(d => (
@@ -201,7 +201,7 @@ export default function ChatBot() {
 
           {/* Input */}
           <div style={{
-            padding: '10px 12px', borderTop: '1px solid rgba(124,58,237,0.15)',
+            padding: '10px 12px', borderTop: '1px solid color-mix(in oklab, var(--accent) 15%, transparent)',
             display: 'flex', gap: 8, alignItems: 'center',
             background: 'rgba(0,0,0,0.3)',
           }}>
@@ -213,19 +213,19 @@ export default function ChatBot() {
               placeholder="Ask about your agency…"
               disabled={loading}
               style={{
-                flex: 1, background: 'rgba(124,58,237,0.08)', border: '1px solid rgba(124,58,237,0.25)',
+                flex: 1, background: 'color-mix(in oklab, var(--accent) 8%, transparent)', border: '1px solid color-mix(in oklab, var(--accent) 25%, transparent)',
                 borderRadius: 10, padding: '9px 13px', color: '#f0f0f0',
                 fontSize: 13.5, outline: 'none', transition: 'border-color 0.15s',
               }}
               onFocus={e => (e.target.style.borderColor = ACCENT)}
-              onBlur={e => (e.target.style.borderColor = 'rgba(124,58,237,0.25)')}
+              onBlur={e => (e.target.style.borderColor = 'color-mix(in oklab, var(--accent) 25%, transparent)')}
             />
             <button
               onClick={send}
               disabled={loading || !input.trim()}
               style={{
                 width: 38, height: 38, borderRadius: 10, border: 'none',
-                background: input.trim() && !loading ? 'linear-gradient(135deg, #ec4899, #db2777)' : 'rgba(255,255,255,0.06)',
+                background: input.trim() && !loading ? 'linear-gradient(135deg, var(--accent), var(--accent))' : 'color-mix(in oklab, var(--ink) 6%, transparent)',
                 cursor: input.trim() && !loading ? 'pointer' : 'not-allowed',
                 display: 'flex', alignItems: 'center', justifyContent: 'center',
                 transition: 'background 0.15s', flexShrink: 0,

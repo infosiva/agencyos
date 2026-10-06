@@ -1,5 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Inter:wght@400;500;600&display=swap');
 @import "tailwindcss";
+@import "./archetypes.css";
 
 *, *::before, *::after { box-sizing: border-box; }
 
@@ -9,40 +10,38 @@ html {
   -webkit-text-size-adjust: 100%;
 }
 
-:root {
-  /* ElderCare+ brand — rose / dark navy (warm trust accent, distinct from myvitals teal) */
-  --aos:       #e11d48;
-  --aos-2:     #fb7185;
-  --aos-dim:   rgba(225,29,72,0.12);
-  --cyan:      #fda4af;
-  --cyan-dim:  rgba(253,164,175,0.10);
-  --emerald:   #10b981;
+/* Hub-switchable tokens: --theme-base / --theme-primary come from Edge Config theme_<siteId> via buildThemeStyleTag. No other hardcoded colours. */
+:root{
+  --bg: var(--theme-base, #f6f7fd);
+  --accent: var(--theme-primary, #4f46e5);
+  --ink: #1c1917; --ink-2: #57534e;
+  --on-accent: #fff; --accent-ink: var(--accent);
+  --surface: color-mix(in oklab, var(--bg) 92%, var(--ink));
+  --surface-strong: color-mix(in oklab, var(--bg) 84%, var(--ink));
+  --line: color-mix(in oklab, var(--ink) 14%, transparent);
+}
+@supports (color: oklch(from red l c h)) {
+  :root{
+    --ink: oklch(from var(--bg) clamp(0.14, calc((0.62 - l) * 100), 0.97) 0.012 h);
+    --ink-2: color-mix(in oklab, var(--ink) 68%, var(--bg));
+    --on-accent: oklch(from var(--accent) clamp(0, calc((0.64 - l) * 100), 1) 0 0);
+    --accent-ink: color-mix(in oklab, var(--accent) 72%, var(--ink));
+  }
+}
 
-  /* Surfaces — dark navy */
-  --bg:        #0f172a;
-  --bg-raised: #1e293b;
-  --bg-card:   rgba(15,23,42,0.70);
-
-  /* Text */
-  --ink-1: #eef0ff;
-  --ink-2: #9a9cc4;
-  --ink-3: #5a5c7a;
-  --ink-4: #35364e;
-
-  /* Borders */
-  --border-s: rgba(255,255,255,0.06);
-  --border-m: rgba(255,255,255,0.10);
-
-  /* Radius */
-  --r-sm: 8px;
-  --r-md: 14px;
-  --r-lg: 20px;
-  --r-xl: 28px;
+/* Legacy aliases so existing components keep working; all derive from the hub-switchable tokens above. */
+:root{
+  --aos: var(--accent); --aos-2: color-mix(in oklab, var(--accent) 70%, var(--ink)); --aos-dim: color-mix(in oklab, var(--accent) 12%, transparent);
+  --cyan: var(--accent-ink); --cyan-dim: color-mix(in oklab, var(--accent) 10%, transparent); --emerald: #15803d;
+  --bg-raised: var(--surface-strong); --bg-card: color-mix(in oklab, var(--bg) 70%, var(--surface));
+  --ink-1: var(--ink); --ink-3: color-mix(in oklab, var(--ink) 58%, var(--bg)); --ink-4: color-mix(in oklab, var(--ink) 30%, var(--bg));
+  --border-s: color-mix(in oklab, var(--ink) 8%, transparent); --border-m: var(--line);
+  --r-sm: 8px; --r-md: calc(var(--radius) - 2px); --r-lg: var(--radius); --r-xl: calc(var(--radius) + 8px);
 }
 
 body {
-  background: var(--bg);
-  color: var(--ink-1);
+  background: transparent;
+  color: var(--ink);
   font-family: 'Inter', system-ui, sans-serif;
   font-size: 16px;
   line-height: 1.6;
@@ -71,7 +70,7 @@ body {
 }
 
 .card-aos {
-  background: rgba(12,12,20,0.55);
+  background: var(--surface);
   backdrop-filter: blur(18px);
   -webkit-backdrop-filter: blur(18px);
   border: 1px solid var(--border-s);
@@ -80,12 +79,12 @@ body {
 }
 .card-aos:hover {
   border-color: color-mix(in srgb, var(--aos) 25%, transparent);
-  box-shadow: 0 0 0 1px var(--aos-dim), 0 8px 32px rgba(0,0,0,0.4);
+  box-shadow: 0 0 0 1px var(--aos-dim), 0 8px 32px color-mix(in oklab, var(--ink) 18%, transparent);
 }
 
 /* ── Inputs ── */
 .input {
-  background: rgba(12,12,22,0.70);
+  background: var(--surface);
   border: 1px solid var(--border-m);
   border-radius: var(--r-md);
   color: var(--ink-1);
@@ -109,7 +108,7 @@ body {
   justify-content: center;
   gap: 8px;
   background: linear-gradient(135deg, var(--aos) 0%, var(--aos-2) 100%);
-  color: #fff;
+  color: var(--on-accent);
   font-family: 'Outfit', sans-serif;
   font-weight: 700;
   font-size: 15px;
@@ -126,7 +125,7 @@ body {
   content: '';
   position: absolute;
   inset: 0;
-  background: linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.12) 50%, transparent 100%);
+  background: linear-gradient(90deg, transparent 0%, color-mix(in oklab, var(--ink) 12%, transparent) 50%, transparent 100%);
   transform: translateX(-100%);
   transition: transform 500ms;
 }
@@ -167,12 +166,12 @@ body {
 }
 .badge-cyan {
   background: var(--cyan-dim);
-  border-color: rgba(34,211,238,0.22);
+  border-color: var(--line);
   color: var(--cyan);
 }
 .badge-green {
-  background: rgba(16,185,129,0.10);
-  border-color: rgba(16,185,129,0.22);
+  background: color-mix(in oklab, var(--emerald) 12%, transparent);
+  border-color: var(--line);
   color: var(--emerald);
 }
 
@@ -236,8 +235,8 @@ body {
   to { transform: rotate(360deg); }
 }
 @keyframes pulse-glow {
-  0%, 100% { box-shadow: 0 0 0 0 rgba(99,102,241,0.4); }
-  50% { box-shadow: 0 0 0 8px rgba(99,102,241,0); }
+  0%, 100% { box-shadow: 0 0 0 0 color-mix(in oklab, var(--accent) 40%, transparent); }
+  50% { box-shadow: 0 0 0 8px transparent; }
 }
 
 .animate-fade-up { animation: fadeUp 0.6s ease both; }
@@ -266,3 +265,6 @@ body {
 @media (max-width: 768px) {
   .orb-1, .orb-2, .orb-3 { width: 200px; height: 200px; }
 }
+
+.glass-strong { background: color-mix(in oklab, var(--bg) 82%, transparent); backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px); }
+.btn-press:active { transform: scale(0.97); }

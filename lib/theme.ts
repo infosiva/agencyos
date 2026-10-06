@@ -1,46 +1,28 @@
 /**
- * lib/theme.ts — derives Tailwind-compatible class strings from vertical config
- * Every component imports from here so the palette is applied consistently.
+ * Tailwind class strings built ONLY from hub-switchable CSS variables (--accent, --ink, --line,
+ * --surface, --on-accent). Literal strings (no interpolation) so Tailwind's scanner emits them.
  */
-import config from '@/vertical.config'
-
-const c = config.themeColor
-
 export const theme = {
-  // Gradient on hero / CTA buttons
-  gradient:        `from-${c}-600 to-${c}-400`,
-  gradientHover:   `hover:from-${c}-700 hover:to-${c}-500`,
-  gradientText:    `bg-gradient-to-r from-${c}-400 to-${c}-200 bg-clip-text text-transparent`,
-
-  // Solid fills
-  solid:           `bg-${c}-600`,
-  solidHover:      `hover:bg-${c}-700`,
-  solidLight:      `bg-${c}-500/10`,
-
-  // Borders & rings
-  border:          `border-${c}-500/30`,
-  ring:            `ring-${c}-500/40`,
-  focusRing:       `focus:ring-${c}-500`,
-
-  // Text
-  textAccent:      `text-${c}-400`,
-  textAccentBold:  `text-${c}-300`,
-
-  // Badge / pill
-  badge:           `bg-${c}-500/20 text-${c}-300 border border-${c}-500/30`,
-
-  // Card
-  card:            'bg-white/[0.03] border border-white/[0.06] backdrop-blur-sm rounded-2xl',
-  cardHover:       `hover:border-${c}-500/30 hover:bg-white/[0.06] transition-all duration-200`,
-
-  // Glow
-  glow:            `shadow-lg shadow-${c}-500/10`,
-  glowHover:       `hover:shadow-xl hover:shadow-${c}-500/20`,
+  gradient: 'bg-[linear-gradient(135deg,var(--accent),color-mix(in_oklab,var(--accent)_70%,var(--ink)))]',
+  gradientHover: 'hover:brightness-110',
+  gradientText: 'bg-[linear-gradient(90deg,var(--accent-ink),var(--accent))] bg-clip-text text-transparent',
+  solid: 'bg-(--accent)',
+  solidHover: 'hover:brightness-110',
+  solidLight: 'bg-[color-mix(in_oklab,var(--accent)_10%,transparent)]',
+  border: 'border-[color-mix(in_oklab,var(--accent)_30%,transparent)]',
+  ring: 'ring-[color-mix(in_oklab,var(--accent)_40%,transparent)]',
+  focusRing: 'focus:ring-(--accent)',
+  textAccent: 'text-(--accent-ink)',
+  textAccentBold: 'text-(--accent-ink)',
+  badge: 'bg-[color-mix(in_oklab,var(--accent)_14%,transparent)] text-(--accent-ink) border border-[color-mix(in_oklab,var(--accent)_30%,transparent)]',
+  card: 'bg-(--surface) border border-(--line) backdrop-blur-sm rounded-2xl',
+  cardHover: 'hover:border-[color-mix(in_oklab,var(--accent)_30%,transparent)] transition-all duration-200',
+  glow: 'shadow-lg shadow-[color-mix(in_oklab,var(--accent)_14%,transparent)]',
+  glowHover: 'hover:shadow-xl',
 }
 
-// Full button style helpers
 export const btn = {
-  primary:   `inline-flex items-center gap-2 px-6 py-3 rounded-xl font-semibold text-white bg-gradient-to-r ${theme.gradient} ${theme.gradientHover} ${theme.glow} ${theme.glowHover} transition-all duration-200`,
-  secondary: `inline-flex items-center gap-2 px-6 py-3 rounded-xl font-semibold text-white/80 bg-white/[0.06] border ${theme.border} hover:bg-white/[0.10] transition-all duration-200`,
-  ghost:     `inline-flex items-center gap-2 px-4 py-2 rounded-lg font-medium ${theme.textAccent} hover:bg-white/[0.06] transition-all duration-200`,
+  primary: 'inline-flex items-center gap-2 px-6 py-3 min-h-11 rounded-xl font-semibold text-(--on-accent) bg-[linear-gradient(135deg,var(--accent),color-mix(in_oklab,var(--accent)_70%,var(--ink)))] hover:brightness-110 shadow-lg shadow-[color-mix(in_oklab,var(--accent)_14%,transparent)] hover:shadow-xl transition-all duration-200 active:scale-[0.97]',
+  secondary: 'inline-flex items-center gap-2 px-6 py-3 min-h-11 rounded-xl font-semibold text-(--ink) bg-(--surface) border border-[color-mix(in_oklab,var(--accent)_30%,transparent)] hover:bg-(--surface-strong) transition-all duration-200',
+  ghost: 'inline-flex items-center gap-2 px-4 py-2 min-h-11 rounded-lg font-medium text-(--accent-ink) hover:bg-(--surface) transition-all duration-200',
 }

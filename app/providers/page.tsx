@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import { redirect } from 'next/navigation'
 import { CheckCircle, DollarSign, Star, TrendingUp, ArrowRight } from 'lucide-react'
 import config from '@/vertical.config'
 import { theme, btn } from '@/lib/theme'
@@ -17,6 +18,7 @@ const STEPS = [
 ]
 
 export default function ProvidersPage() {
+  if (config.id === 'agency') redirect('/how-it-works') // no provider-acquisition funnel for the agency preset
   return (
     <div className="overflow-hidden">
       {/* Hero */}
@@ -27,24 +29,24 @@ export default function ProvidersPage() {
           Now accepting new {config.providerPlural.toLowerCase()}
         </div>
 
-        <h1 className="text-4xl md:text-5xl font-extrabold text-white mb-6 leading-tight">
+        <h1 className="text-4xl md:text-5xl font-extrabold text-(--ink) mb-6 leading-tight">
           Grow your {config.providerLabel.toLowerCase()} business<br/>
           <span className={theme.gradientText}>on your terms</span>
         </h1>
-        <p className="text-white/50 text-lg mb-10 max-w-2xl mx-auto leading-relaxed">
+        <p className="text-[color-mix(in_oklab,var(--ink)_50%,transparent)] text-lg mb-10 max-w-2xl mx-auto leading-relaxed">
           Join {config.name} and get matched with clients who need exactly what you offer.
           Keep more of what you earn. Own your reviews. Build your reputation.
         </p>
         <Link href="/join" className={btn.primary + ' text-base px-10 py-4'}>
           Apply to join <ArrowRight size={18} />
         </Link>
-        <p className="text-white/30 text-xs mt-3">Free to apply · No monthly fees · Start earning in 48 hours</p>
+        <p className="text-[color-mix(in_oklab,var(--ink)_30%,transparent)] text-xs mt-3">Free to apply · No monthly fees · Start earning in 48 hours</p>
       </section>
 
       {/* Benefits */}
-      <section className="py-20 px-6 glass border-y border-white/[0.06]">
+      <section className="py-20 px-6 glass border-y border-[color-mix(in_oklab,var(--ink)_6%,transparent)]">
         <div className="max-w-5xl mx-auto">
-          <h2 className="text-2xl font-bold text-white text-center mb-12">Why join {config.name}?</h2>
+          <h2 className="text-2xl font-bold text-(--ink) text-center mb-12">Why join {config.name}?</h2>
           <div className="grid md:grid-cols-2 gap-6">
             {BENEFITS.map(b => (
               <div key={b.title} className={`${theme.card} p-6 flex gap-4 items-start`}>
@@ -52,8 +54,8 @@ export default function ProvidersPage() {
                   {b.icon}
                 </div>
                 <div>
-                  <h3 className="font-semibold text-white mb-1">{b.title}</h3>
-                  <p className="text-white/50 text-sm leading-relaxed">{b.desc}</p>
+                  <h3 className="font-semibold text-(--ink) mb-1">{b.title}</h3>
+                  <p className="text-[color-mix(in_oklab,var(--ink)_50%,transparent)] text-sm leading-relaxed">{b.desc}</p>
                 </div>
               </div>
             ))}
@@ -63,15 +65,15 @@ export default function ProvidersPage() {
 
       {/* How to join */}
       <section className="py-20 px-6 max-w-5xl mx-auto">
-        <h2 className="text-2xl font-bold text-white text-center mb-12">Getting started</h2>
+        <h2 className="text-2xl font-bold text-(--ink) text-center mb-12">Getting started</h2>
         <div className="grid md:grid-cols-3 gap-8 text-center">
           {STEPS.map(s => (
             <div key={s.n}>
-              <div className={`w-12 h-12 rounded-full bg-gradient-to-br ${theme.gradient} flex items-center justify-center text-white font-bold text-xl mx-auto mb-4`}>
+              <div className={`w-12 h-12 rounded-full bg-gradient-to-br ${theme.gradient} flex items-center justify-center text-(--ink) font-bold text-xl mx-auto mb-4`}>
                 {s.n}
               </div>
-              <h3 className="font-bold text-white mb-2">{s.title}</h3>
-              <p className="text-white/50 text-sm leading-relaxed">{s.desc}</p>
+              <h3 className="font-bold text-(--ink) mb-2">{s.title}</h3>
+              <p className="text-[color-mix(in_oklab,var(--ink)_50%,transparent)] text-sm leading-relaxed">{s.desc}</p>
             </div>
           ))}
         </div>

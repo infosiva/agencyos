@@ -45,11 +45,11 @@ export default function ChatWidget({ onClose }: { onClose?: () => void }) {
       {/* Header */}
       <div className={`flex items-center justify-between px-4 py-3 bg-gradient-to-r ${theme.gradient} rounded-t-2xl`}>
         <div className="flex items-center gap-2">
-          <Sparkles size={18} className="text-white" />
-          <span className="font-semibold text-white text-sm">AI {config.providerLabel} Matcher</span>
+          <Sparkles size={18} className="text-(--ink)" />
+          <span className="font-semibold text-(--ink) text-sm">AI {config.providerLabel} Matcher</span>
         </div>
         {onClose && (
-          <button onClick={onClose} className="text-white/70 hover:text-white transition-colors">
+          <button onClick={onClose} className="text-[color-mix(in_oklab,var(--ink)_70%,transparent)] hover:text-(--ink) transition-colors">
             <X size={18} />
           </button>
         )}
@@ -61,8 +61,8 @@ export default function ChatWidget({ onClose }: { onClose?: () => void }) {
           <div key={i} className={`flex ${m.role === 'user' ? 'justify-end' : 'justify-start'}`}>
             <div className={`max-w-[80%] rounded-2xl px-4 py-2.5 text-sm leading-relaxed ${
               m.role === 'user'
-                ? `bg-gradient-to-r ${theme.gradient} text-white`
-                : 'glass text-white/85'
+                ? `bg-gradient-to-r ${theme.gradient} text-(--ink)`
+                : 'glass text-[color-mix(in_oklab,var(--ink)_85%,transparent)]'
             }`}>
               {m.content}
             </div>
@@ -71,9 +71,9 @@ export default function ChatWidget({ onClose }: { onClose?: () => void }) {
         {loading && (
           <div className="flex justify-start">
             <div className="glass rounded-2xl px-4 py-3 flex gap-1 items-center">
-              <span className="typing-dot text-white/50" />
-              <span className="typing-dot text-white/50" />
-              <span className="typing-dot text-white/50" />
+              <span className="typing-dot text-[color-mix(in_oklab,var(--ink)_50%,transparent)]" />
+              <span className="typing-dot text-[color-mix(in_oklab,var(--ink)_50%,transparent)]" />
+              <span className="typing-dot text-[color-mix(in_oklab,var(--ink)_50%,transparent)]" />
             </div>
           </div>
         )}
@@ -81,7 +81,7 @@ export default function ChatWidget({ onClose }: { onClose?: () => void }) {
       </div>
 
       {/* Input */}
-      <div className="p-3 border-t border-white/[0.06]">
+      <div className="p-3 border-t border-[color-mix(in_oklab,var(--ink)_6%,transparent)]">
         <div className="flex gap-2">
           <input
             className="input-dark flex-1 text-sm py-2.5"
@@ -93,12 +93,12 @@ export default function ChatWidget({ onClose }: { onClose?: () => void }) {
           <button
             onClick={send}
             disabled={loading || !input.trim()}
-            className={`px-4 py-2.5 rounded-xl bg-gradient-to-r ${theme.gradient} text-white disabled:opacity-40 transition-all flex items-center gap-1.5`}
+            className={`px-4 py-2.5 rounded-xl bg-gradient-to-r ${theme.gradient} text-(--ink) disabled:opacity-40 transition-all flex items-center gap-1.5`}
           >
             <Send size={16} />
           </button>
         </div>
-        <p className="text-white/25 text-xs mt-2 text-center">Powered by AI — free to use</p>
+        <p className="text-[color-mix(in_oklab,var(--ink)_25%,transparent)] text-xs mt-2 text-center">Powered by AI — free to use</p>
       </div>
     </div>
   )

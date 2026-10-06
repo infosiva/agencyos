@@ -12,7 +12,7 @@ export default function ChatPage() {
       <div className="w-full max-w-xl">
         <div className="text-center mb-6">
           <h1 className={`text-2xl font-bold ${theme.gradientText}`}>Find your {config.providerLabel}</h1>
-          <p className="text-white/45 text-sm mt-1">Just describe what you need — our AI does the rest</p>
+          <p className="text-[color-mix(in_oklab,var(--ink)_45%,transparent)] text-sm mt-1">Just describe what you need — our AI does the rest</p>
         </div>
         <div className={`${theme.card} rounded-2xl overflow-hidden ${theme.glow}`} style={{ minHeight: 520 }}>
           <ChatWidget />

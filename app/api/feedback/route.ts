@@ -1,12 +1,27 @@
 import { NextRequest, NextResponse } from 'next/server'
+import { log } from '@/lib/log'
 
+// Structured log + optional Telegram (only if both env vars are set). No auth: any visitor may submit.
 export async function POST(req: NextRequest) {
   try {
-    const body = await req.json()
-    const { vote, text, page, ts } = body
-    console.log('[feedback]', { vote, text: text?.slice(0, 500), page, ts })
+    const b = await req.json()
+    const rec = {
+      type: String(b.type ?? b.vote ?? '').slice(0, 30),
+      rating: typeof b.rating === 'number' ? b.rating : undefined,
+      message: String(b.message ?? b.text ?? '').slice(0, 500),
+      page: String(b.page ?? '').slice(0, 120),
+      site: 'agencyos',
+    }
+    log('info', 'feedback_sent', rec)
+    const tok = process.env.TELEGRAM_BOT_TOKEN, chat = process.env.TELEGRAM_CHAT_ID
+    if (tok && chat) {
+      fetch(`https://api.telegram.org/bot${tok}/sendMessage`, {
+        method: 'POST', headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({ chat_id: chat, text: `agencyos feedback [${rec.type}] ${rec.message}`.slice(0, 900) }),
+      }).catch(() => {})
+    }
     return NextResponse.json({ ok: true })
   } catch {
-    return NextResponse.json({ ok: false }, { status: 400 })
+    return NextResponse.json({ ok: true })
   }
 }

@@ -1,739 +1,183 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { motion, AnimatePresence } from 'framer-motion'
+import { motion } from 'framer-motion'
 import { MagneticButton } from '@infosiva/shared-ui/modern'
 import {
-  Mic, Video, FileText, Mail, Share2, Scissors,
-  BarChart3, ArrowRight, Loader2, ChevronDown, ChevronUp,
-  Zap, Globe, Clock, Search, TrendingUp, Target,
-  Briefcase, Palette, Layout, Check, X, Users, FolderOpen, FileBarChart, UserCircle,
-} from 'lucide-react'
+  ShieldCheck, Heart, Clock, ArrowRight, Search, Sparkles } from 'lucide-react'
+import config from '@/vertical.config'
+import HeroChatPreview from '@/components/HeroChatPreview'
 
-// ── Dashboard stats (localStorage) ──────────────────────────
-function useDashStats() {
-  const [stats, setStats] = useState({ clients: 0, projects: 0, reports: 0, members: 0 })
-  useEffect(() => {
-    try {
-      const stored = JSON.parse(localStorage.getItem('ao_stats') || '{}')
-      setStats({
-        clients: stored.clients ?? 0,
-        projects: stored.projects ?? 0,
-        reports: stored.reports ?? 0,
-        members: stored.members ?? 0,
-      })
-    } catch { /* ignore */ }
-  }, [])
-  return stats
-}
-
-function DashboardStats() {
-  const stats = useDashStats()
-  const hasData = stats.clients > 0 || stats.projects > 0 || stats.reports > 0 || stats.members > 0
-  if (!hasData) return null
-  const items = [
-    { icon: UserCircle, label: 'Clients',            val: stats.clients,  color: 'var(--aos)' },
-    { icon: FolderOpen, label: 'Active Projects',    val: stats.projects, color: 'var(--cyan)' },
-    { icon: FileBarChart, label: 'Reports Generated', val: stats.reports,  color: '#a78bfa' },
-    { icon: Users,      label: 'Team Members',       val: stats.members,  color: '#34d399' },
-  ]
-  return (
-    <motion.div
-      initial={{ opacity: 0, y: 16 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ delay: 0.3, duration: 0.5 }}
-      style={{
-        maxWidth: 860, margin: '0 auto 40px', padding: '0 24px',
-        display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 12,
-        position: 'relative', zIndex: 10,
-      }}
-      className="aos-stats-strip"
-    >
-      {items.map(({ icon: Icon, label, val, color }) => (
-        <div key={label} className="glass" style={{ padding: '16px 20px', display: 'flex', alignItems: 'center', gap: 14 }}>
-          <div style={{ width: 36, height: 36, borderRadius: 9, background: `${color}18`, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-            <Icon size={17} color={color} />
-          </div>
-          <div>
-            <div style={{ fontFamily: "'Outfit', sans-serif", fontWeight: 800, fontSize: 22, color: 'var(--ink-1)', lineHeight: 1 }}>{val}</div>
-            <div style={{ fontSize: 11, color: 'var(--ink-3)', marginTop: 2 }}>{label}</div>
-          </div>
-        </div>
-      ))}
-      <style>{`@media (max-width: 600px) { .aos-stats-strip { grid-template-columns: repeat(2, 1fr) !important; } }`}</style>
-    </motion.div>
-  )
-}
-
-// ── Output definitions ───────────────────────────────────────
-const OUTPUTS = [
-  { icon: FileText,  label: 'Blog / SEO Article',  desc: '1,200-word SEO article with meta + headings', color: 'var(--aos)' },
-  { icon: Mic,       label: 'Podcast Episode',      desc: 'Hook + outline + full script + show notes', color: 'var(--cyan)' },
-  { icon: Video,     label: 'Faceless Video',       desc: 'AI voiceover script + 8 B-roll scene prompts', color: '#a78bfa' },
-  { icon: Share2,    label: 'LinkedIn Posts',       desc: '3 posts — thought leader, hook bait, carousel', color: '#3b82f6' },
-  { icon: Mail,      label: 'Email Sequence',       desc: '5-email nurture — welcome → educate → convert', color: '#f59e0b' },
-  { icon: Scissors,  label: 'Short Clips',          desc: '10 Reels/TikTok captions with hook formulas', color: 'var(--emerald)' },
-  { icon: BarChart3, label: 'Client Report',        desc: 'Strategy deck + 30-day content calendar', color: '#f472b6' },
+const COPY = config.copy
+const STEPS = COPY?.steps.map((t, i) => ({ n: String(i + 1), ...t })) ?? [
+  { n: '1', title: 'Tell us what you need', desc: `Share ${config.consumerLabel.toLowerCase()} routine, mobility, and personality — takes two minutes.` },
+  { n: '2', title: `Meet vetted ${config.providerPlural.toLowerCase()}`, desc: `Background-checked, reference-verified ${config.providerLabel.toLowerCase()}s matched to your needs.` },
+  { n: '3', title: 'Book with confidence', desc: 'Message, video-call, or meet in person before you commit to anyone.' },
 ]
 
-// ── Integrations (Canva, Figma, etc.) ───────────────────────
-const INTEGRATIONS = [
-  { name: 'Canva', desc: 'Auto-export designs to Canva templates', icon: '🎨', status: 'soon' },
-  { name: 'Figma', desc: 'Push brand guidelines to Figma library', icon: '✏️', status: 'soon' },
-  { name: 'Notion', desc: 'Sync content calendar to Notion DB', icon: '📋', status: 'soon' },
-  { name: 'Zapier', desc: 'Trigger workflows from generated content', icon: '⚡', status: 'soon' },
-  { name: 'Buffer', desc: 'Schedule LinkedIn/Twitter posts directly', icon: '📅', status: 'soon' },
-  { name: 'Make.com', desc: 'Multi-step automation from brief to publish', icon: '🔄', status: 'soon' },
+const ICONS = { shield: ShieldCheck, heart: Heart, clock: Clock, sparkles: Sparkles }
+const TRUST = COPY?.trust.map((t) => ({ ...t, icon: ICONS[t.icon] })) ?? [
+  { icon: ShieldCheck, label: 'Background-checked', desc: `Every ${config.providerLabel.toLowerCase()} is DBS-checked and reference-verified` },
+  { icon: Heart, label: 'Personality matched', desc: 'Matched on temperament, not just availability' },
+  { icon: Clock, label: 'Flexible scheduling', desc: 'From a few hours a week to live-in care' },
 ]
 
-// ── Opportunity research agent modules ──────────────────────
-const RESEARCH_MODULES = [
-  { icon: Search,     label: 'Trend Scout',       desc: 'Finds trending topics in your niche from Reddit, X, LinkedIn' },
-  { icon: TrendingUp, label: 'Gap Analyzer',      desc: "Spots keyword + content gaps competitors haven't covered" },
-  { icon: Target,     label: 'Audience Intel',    desc: 'Maps buyer pain points to content formats that convert' },
-  { icon: Briefcase,  label: 'Client Finder',     desc: 'Surfaces local/niche businesses ready to outsource content' },
-  { icon: Globe,      label: 'Market Pulse',      desc: "Daily brief: what's blowing up in your industry today" },
-]
-
-// ── Competitor comparison ────────────────────────────────────
-const COMPETITORS = [
-  { name: 'Repurpose.io', price: '$49/mo', does: 'Repurpose existing content', doesnt: 'Create content from scratch' },
-  { name: 'Opus Clip',    price: '$35/mo', does: 'Clip long videos',           doesnt: 'Write scripts or blogs' },
-  { name: 'Capsho',       price: '$59/mo', does: 'Podcast show notes',         doesnt: 'Video / social / email' },
-  { name: 'Blotato',      price: '$39/mo', does: 'LinkedIn repurpose',         doesnt: 'Full agency workflow' },
-  { name: 'HeyGen',       price: '$99/mo', does: 'Talking-head AI video',      doesnt: 'Strategy or copy' },
-  { name: 'AgencyOS',     price: 'Free',   does: 'All 7 formats + research + integrations', doesnt: null },
-]
-
-// ── Loading steps ────────────────────────────────────────────
-const LOADING_STEPS = [
-  'Researching your topic...',
-  'Writing SEO blog post...',
-  'Scripting podcast episode...',
-  'Building video storyboard...',
-  'Crafting LinkedIn posts...',
-  'Writing email sequence...',
-  'Creating clip captions...',
-  'Compiling client report...',
-  'All 7 outputs ready!',
-]
-
-// ── Live activity ticker ─────────────────────────────────────
-const TICKER_ITEMS = [
-  '📝 Blog: "10 AI Tools That Replace a Full Marketing Team"',
-  '🎙️ Podcast: "Zero Employee Business Models in 2026"',
-  '🎬 Video: "How I Automated My Agency With 3 Prompts"',
-  '📱 LinkedIn: 3 posts for TechStartupFounders scheduled',
-  '📧 Email: 5-part sequence for SaaS onboarding ready',
-  '✂️ Clips: 10 TikTok hooks for B2B content strategy',
-  '📊 Report: 30-day content calendar compiled',
-  '🔍 Research: Found 14 trending gaps in AI niche',
-  '🎨 Canva template synced with brand kit',
-  '📁 Client deck exported to Figma',
-]
-
-function LiveTicker() {
-  const doubled = [...TICKER_ITEMS, ...TICKER_ITEMS]
-  return (
-    <div className="ticker-wrap" style={{ borderTop: '1px solid var(--border-s)', borderBottom: '1px solid var(--border-s)', padding: '10px 0', background: 'rgba(12,12,20,0.50)' }}>
-      <div className="ticker-inner">
-        {doubled.map((item, i) => (
-          <span key={i} style={{ color: 'var(--ink-2)', fontSize: 13, fontFamily: "'Inter', sans-serif" }}>
-            {item}
-          </span>
-        ))}
-      </div>
-    </div>
-  )
-}
-
-// ── FAQ data ─────────────────────────────────────────────────
-const FAQS = [
-  {
-    q: 'How long does generation take?',
-    a: 'All 7 outputs are generated in parallel using AI — typically 60–90 seconds. Podcast scripts and blog posts run simultaneously so you\'re not waiting 7x longer.',
-  },
-  {
-    q: 'Do I need to know how to use AI?',
-    a: 'No. Fill in 3 fields: your brand name, topic, and target audience. AgencyOS handles everything else. No prompting skills required.',
-  },
-  {
-    q: 'When are Canva and Figma integrations available?',
-    a: 'These are on our Q3 roadmap. Sign up free and you\'ll get early access when they launch — Canva auto-export and Figma brand kit sync.',
-  },
-  {
-    q: 'What is the Opportunity Research Agent?',
-    a: 'It\'s a built-in research layer that finds trending topics, content gaps, and even potential clients in your niche before you write a single brief. Available on Agency and Studio plans.',
-  },
-  {
-    q: 'Can I white-label the client report?',
-    a: 'Yes — on Agency and Studio plans, the client report is fully white-labeled with your agency branding, logo, and contact details.',
-  },
-]
-
-function Faq({ q, a }: { q: string; a: string }) {
-  const [open, setOpen] = useState(false)
-  return (
-    <div
-      onClick={() => setOpen(o => !o)}
-      style={{
-        borderBottom: '1px solid var(--border-s)',
-        padding: '18px 0',
-        cursor: 'pointer',
-      }}
-    >
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 16 }}>
-        <span style={{ fontWeight: 600, fontSize: 15, color: 'var(--ink-1)' }}>{q}</span>
-        {open ? <ChevronUp size={16} color="var(--ink-3)" /> : <ChevronDown size={16} color="var(--ink-3)" />}
-      </div>
-      <AnimatePresence>
-        {open && (
-          <motion.p
-            initial={{ height: 0, opacity: 0 }}
-            animate={{ height: 'auto', opacity: 1 }}
-            exit={{ height: 0, opacity: 0 }}
-            transition={{ duration: 0.22 }}
-            style={{ color: 'var(--ink-2)', fontSize: 14, lineHeight: 1.7, marginTop: 10, overflow: 'hidden' }}
-          >
-            {a}
-          </motion.p>
-        )}
-      </AnimatePresence>
-    </div>
-  )
-}
-
-// ── Main page ────────────────────────────────────────────────
-export default function HomePage() {
+export default function Home() {
   const router = useRouter()
-  const [brand, setBrand] = useState('')
-  const [topic, setTopic] = useState('')
-  const [audience, setAudience] = useState('')
-  const [loading, setLoading] = useState(false)
-  const [stepIdx, setStepIdx] = useState(0)
-  const [error, setError] = useState('')
-  const [showPromo, setShowPromo] = useState(false)
-  const [promoCode, setPromoCode] = useState('')
-  const [promoMsg, setPromoMsg] = useState('')
+  const [query, setQuery] = useState('')
 
-  const handlePromo = async (e: React.FormEvent) => {
+  function handleSearch(e: React.FormEvent) {
     e.preventDefault()
-    const res = await fetch('/api/promo', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ code: promoCode }) })
-    const data = await res.json()
-    setPromoMsg(data.valid ? `✓ ${data.daysUnlocked}d Pro unlocked!` : 'Invalid code')
-    setTimeout(() => setPromoMsg(''), 3000)
-  }
-
-  async function handleSubmit(e: React.FormEvent) {
-    e.preventDefault()
-    if (!brand || !topic || !audience) return
-    setLoading(true)
-    setStepIdx(0)
-    setError('')
-
-    const timer = setInterval(() => {
-      setStepIdx(i => Math.min(i + 1, LOADING_STEPS.length - 2))
-    }, 1500)
-
-    try {
-      const res = await fetch('/api/generate', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ brand, topic, audience }),
-      })
-      clearInterval(timer)
-      if (!res.ok) throw new Error('Generation failed')
-      const { id } = await res.json()
-      setStepIdx(LOADING_STEPS.length - 1)
-      setTimeout(() => router.push(`/result/${id}`), 600)
-    } catch {
-      clearInterval(timer)
-      setLoading(false)
-      setError('Something went wrong. Try again.')
-    }
+    router.push(`/search${query ? `?q=${encodeURIComponent(query)}` : ''}`)
   }
 
   return (
-    <>
-      {/* Background */}
-      <div className="aos-mesh" />
-      <div className="orb orb-1" />
-      <div className="orb orb-2" />
-      <div className="orb orb-3" />
+    <main style={{ minHeight: '100vh' }}>
 
-      {/* Live ticker */}
-      <LiveTicker />
+      {/* Hero */}
+      <section className="max-w-6xl mx-auto px-6 pt-16 pb-20 grid lg:grid-cols-2 gap-12 items-center">
+        <div>
+          <motion.div
+            initial={{ opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, ease: [0.23, 1, 0.32, 1] }}
+            className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-[13px] font-medium mb-6"
+            style={{ background: 'var(--aos-dim)', color: 'var(--aos-2)', border: '1px solid var(--aos-dim)' }}
+          >
+            <ShieldCheck size={14} />
+            {COPY?.badge ?? `Background-checked & insured ${config.providerPlural.toLowerCase()}`}
+          </motion.div>
 
-      {/* ── Hero ── */}
-      <section style={{ maxWidth: 860, margin: '0 auto', padding: '80px 24px 40px', textAlign: 'center', position: 'relative', zIndex: 10 }}>
-        <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
-          <span className="badge-aos" style={{ marginBottom: 24, display: 'inline-flex' }}>
-            <Zap size={11} />
-            Your competitors use 6 tools. You use one.
-          </span>
-        </motion.div>
+          <motion.h1
+            initial={{ opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.05, ease: [0.23, 1, 0.32, 1] }}
+            className="text-4xl sm:text-5xl font-extrabold tracking-tight leading-[1.1] mb-5"
+            style={{ color: 'var(--ink-1)' }}
+          >
+            {COPY?.heroHead ?? 'Find trusted in-home care for the people who'} <span style={{ color: 'var(--accent-ink)' }}>{COPY?.heroAccent ?? 'raised you'}</span>
+          </motion.h1>
 
-        <motion.h1
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.1, duration: 0.55 }}
-          style={{
-            fontFamily: "'Outfit', sans-serif",
-            fontWeight: 900,
-            fontSize: 'clamp(36px, 6vw, 72px)',
-            lineHeight: 1.08,
-            letterSpacing: '-0.04em',
-            color: 'var(--ink-1)',
-            margin: '0 0 24px',
-          }}
-        >
-          Run your agency on AI —<br />
-          <span style={{ background: 'linear-gradient(135deg, #6366f1 0%, #06b6d4 100%)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
-            client reports, projects, team ops
-          </span>
-        </motion.h1>
+          <motion.p
+            initial={{ opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.1, ease: [0.23, 1, 0.32, 1] }}
+            className="text-lg mb-8 max-w-lg"
+            style={{ color: 'var(--ink-2)' }}
+          >
+            {config.tagline}
+          </motion.p>
 
-        <motion.p
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.2, duration: 0.5 }}
-          style={{ color: 'var(--ink-2)', fontSize: 18, lineHeight: 1.65, maxWidth: 600, margin: '0 auto 48px' }}
-        >
-          AI that writes client updates, tracks project health, and keeps your team aligned — automatically. One platform. No agency fees.
-        </motion.p>
-
-        {/* Stats row */}
-        <motion.div
-          initial={{ opacity: 0, y: 16 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.28, duration: 0.5 }}
-          style={{ display: 'flex', justifyContent: 'center', gap: 32, flexWrap: 'wrap', marginBottom: 48 }}
-        >
-          {[
-            { val: '7', label: 'formats' },
-            { val: '90s', label: 'avg time' },
-            { val: '∞', label: 'free tier' },
-            { val: '1', label: 'brief needed' },
-          ].map(s => (
-            <div key={s.label} style={{ textAlign: 'center' }}>
-              <div style={{ fontFamily: "'Outfit', sans-serif", fontWeight: 800, fontSize: 28, color: 'var(--ink-1)', lineHeight: 1 }}>{s.val}</div>
-              <div style={{ color: 'var(--ink-3)', fontSize: 12, marginTop: 4 }}>{s.label}</div>
+          <motion.form
+            onSubmit={handleSearch}
+            initial={{ opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.15, ease: [0.23, 1, 0.32, 1] }}
+            className="flex gap-2 mb-8"
+          >
+            <div className="relative flex-1">
+              <Search size={18} style={{ color: 'var(--ink-3)' }} className="absolute left-4 top-1/2 -translate-y-1/2" />
+              <input
+                value={query}
+                onChange={(e) => setQuery(e.target.value)}
+                placeholder={COPY?.searchPlaceholder ?? 'What kind of care do you need?'}
+                className="w-full pl-11 pr-4 py-3.5 rounded-xl text-[15px] outline-none"
+                style={{ background: 'color-mix(in oklab, var(--ink) 4%, transparent)', border: '1px solid color-mix(in oklab, var(--ink) 8%, transparent)', color: 'var(--ink-1)' }}
+              />
             </div>
-          ))}
-        </motion.div>
+            <MagneticButton
+              type="submit"
+              className="inline-flex items-center gap-2 px-6 py-3.5 rounded-xl font-semibold transition-transform active:scale-[0.97]"
+              style={{ background: 'var(--accent)', color: 'var(--on-accent)' }}
+            >
+              {COPY?.searchCta ?? `Find ${config.providerPlural}`} <ArrowRight size={16} />
+            </MagneticButton>
+          </motion.form>
 
-        {/* ── Brief form ── */}
+        </div>
+
+        {/* Animated right panel — real product demo, config-driven */}
         <motion.div
-          initial={{ opacity: 0, y: 24 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.35, duration: 0.55 }}
-          className="glass"
-          style={{ padding: '32px', maxWidth: 560, margin: '0 auto', textAlign: 'left' }}
+          initial={{ opacity: 0, scale: 0.96 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.5, delay: 0.15, ease: [0.23, 1, 0.32, 1] }}
         >
-          <AnimatePresence mode="wait">
-            {loading ? (
-              <motion.div
-                key="loading"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                style={{ textAlign: 'center', padding: '20px 0' }}
+          <HeroChatPreview />
+        </motion.div>
+      </section>
+
+      {/* Categories — driven entirely by config, works for any vertical preset */}
+      <section className="max-w-6xl mx-auto px-6 py-16">
+        <h2 className="text-2xl font-bold mb-2" style={{ color: 'var(--ink-1)' }}>{COPY?.categoriesHeading ?? 'Care, matched to what you actually need'}</h2>
+        <p className="mb-10" style={{ color: 'var(--ink-3)' }}>{COPY?.categoriesSub ?? `Six ways ${config.name} helps ${config.consumerLabel.toLowerCase()}s and their loved ones.`}</p>
+        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          {config.categories.map((cat, i) => (
+            <motion.div
+              key={cat.id}
+              initial={{ opacity: 0, y: 12 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.4, delay: i * 0.05, ease: [0.23, 1, 0.32, 1] }}
+              className="p-5 rounded-2xl transition-all duration-200"
+              style={{ background: 'color-mix(in oklab, var(--ink) 3%, transparent)', border: '1px solid color-mix(in oklab, var(--ink) 6%, transparent)' }}
+            >
+              <div className="text-2xl mb-3">{cat.icon}</div>
+              <h3 className="font-semibold mb-1.5" style={{ color: 'var(--ink-1)' }}>{cat.label}</h3>
+              <p className="text-[14px] leading-relaxed" style={{ color: 'var(--ink-3)' }}>{cat.desc}</p>
+            </motion.div>
+          ))}
+        </div>
+      </section>
+
+      {/* How it works */}
+      <section className="max-w-6xl mx-auto px-6 py-16">
+        <h2 className="text-2xl font-bold mb-10" style={{ color: 'var(--ink-1)' }}>How it works</h2>
+        <div className="grid sm:grid-cols-3 gap-8">
+          {STEPS.map((step) => (
+            <div key={step.n}>
+              <div
+                className="w-9 h-9 rounded-full flex items-center justify-center font-bold text-[15px] mb-4"
+                style={{ background: 'var(--aos-dim)', color: 'var(--aos-2)' }}
               >
-                <Loader2 size={28} color="var(--aos)" style={{ animation: 'spin 0.8s linear infinite', display: 'block', margin: '0 auto 16px' }} />
-                <AnimatePresence mode="wait">
-                  <motion.p
-                    key={stepIdx}
-                    initial={{ opacity: 0, y: 6 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -6 }}
-                    style={{ color: 'var(--ink-2)', fontSize: 14, margin: 0 }}
-                  >
-                    {LOADING_STEPS[stepIdx]}
-                  </motion.p>
-                </AnimatePresence>
-                <div style={{ marginTop: 20, background: 'var(--border-s)', borderRadius: 4, height: 4, overflow: 'hidden' }}>
-                  <div style={{
-                    height: '100%',
-                    borderRadius: 4,
-                    background: 'linear-gradient(90deg, var(--aos), var(--cyan))',
-                    width: `${((stepIdx + 1) / LOADING_STEPS.length) * 100}%`,
-                    transition: 'width 1.2s ease',
-                  }} />
-                </div>
-              </motion.div>
-            ) : (
-              <motion.form key="form" onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
-                <div>
-                  <label style={{ color: 'var(--ink-3)', fontSize: 11, fontWeight: 600, letterSpacing: '0.08em', textTransform: 'uppercase', display: 'block', marginBottom: 6 }}>
-                    Brand / Company name
-                  </label>
-                  <input className="input" placeholder="e.g. Acme Marketing" value={brand} onChange={e => setBrand(e.target.value)} required />
-                </div>
-                <div>
-                  <label style={{ color: 'var(--ink-3)', fontSize: 11, fontWeight: 600, letterSpacing: '0.08em', textTransform: 'uppercase', display: 'block', marginBottom: 6 }}>
-                    Topic / angle
-                  </label>
-                  <input className="input" placeholder="e.g. AI tools for small businesses in 2026" value={topic} onChange={e => setTopic(e.target.value)} required />
-                </div>
-                <div>
-                  <label style={{ color: 'var(--ink-3)', fontSize: 11, fontWeight: 600, letterSpacing: '0.08em', textTransform: 'uppercase', display: 'block', marginBottom: 6 }}>
-                    Target audience
-                  </label>
-                  <input className="input" placeholder="e.g. SaaS founders, 25–45" value={audience} onChange={e => setAudience(e.target.value)} required />
-                </div>
-                {error && <p style={{ color: '#f87171', fontSize: 13, margin: 0 }}>{error}</p>}
-                <MagneticButton type="submit" className="btn-aos" style={{ width: '100%', marginTop: 4, justifyContent: 'center' }}>
-                  Generate 7 outputs — free
-                  <ArrowRight size={16} />
-                </MagneticButton>
-                <p style={{ color: 'var(--ink-3)', fontSize: 12, textAlign: 'center', margin: 0 }}>
-                  No account required. Results in ~90 seconds.
-                </p>
-                <div style={{ textAlign: 'center', marginTop: 4 }}>
-                  <button type="button" onClick={() => setShowPromo(p => !p)} style={{ fontSize: 11, color: 'var(--ink-3)', background: 'none', border: 'none', cursor: 'pointer', textDecoration: 'underline' }}>
-                    Have a promo code?
-                  </button>
-                  {showPromo && (
-                    <form onSubmit={handlePromo} style={{ display: 'flex', gap: 8, justifyContent: 'center', marginTop: 6 }}>
-                      <input value={promoCode} onChange={e => setPromoCode(e.target.value)} placeholder="Enter code" style={{ fontSize: 12, padding: '4px 10px', borderRadius: 8, border: '1px solid rgba(255,255,255,0.15)', background: 'rgba(255,255,255,0.07)', color: 'var(--ink-1)', width: 130 }} />
-                      <button type="submit" style={{ fontSize: 12, padding: '4px 12px', borderRadius: 8, background: 'rgba(255,255,255,0.10)', border: '1px solid rgba(255,255,255,0.15)', cursor: 'pointer', color: 'var(--ink-1)' }}>
-                        {promoMsg || 'Apply'}
-                      </button>
-                    </form>
-                  )}
-                </div>
-              </motion.form>
-            )}
-          </AnimatePresence>
-        </motion.div>
-      </section>
-
-      {/* ── Dashboard stats ── */}
-      <DashboardStats />
-
-      {/* ── Generate client report CTA ── */}
-      <motion.div
-        initial={{ opacity: 0, y: 16 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.4, duration: 0.5 }}
-        style={{ maxWidth: 860, margin: '0 auto 60px', padding: '0 24px', position: 'relative', zIndex: 10, textAlign: 'center' }}
-      >
-        <div className="card-aos" style={{ padding: '28px 32px', display: 'flex', flexWrap: 'wrap', alignItems: 'center', justifyContent: 'space-between', gap: 20, borderColor: 'rgba(99,102,241,0.25)' }}>
-          <div style={{ textAlign: 'left' }}>
-            <div style={{ fontFamily: "'Outfit', sans-serif", fontWeight: 800, fontSize: 18, color: 'var(--ink-1)', marginBottom: 4 }}>
-              Generate a client report — instantly
-            </div>
-            <div style={{ color: 'var(--ink-3)', fontSize: 13, maxWidth: 420 }}>
-              AI writes a full white-label client update with project status, next steps, and KPIs. Ready in 30 seconds.
-            </div>
-          </div>
-          <button className="btn-aos" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })} style={{ flexShrink: 0 }}>
-            <BarChart3 size={15} />
-            Generate Client Report
-          </button>
-        </div>
-      </motion.div>
-
-      {/* ── Outputs grid ── */}
-      <section id="outputs" style={{ maxWidth: 1100, margin: '0 auto', padding: '80px 24px', position: 'relative', zIndex: 10 }}>
-        <div style={{ textAlign: 'center', marginBottom: 48 }}>
-          <span className="badge-cyan" style={{ display: 'inline-flex', marginBottom: 16 }}>7 outputs in one run</span>
-          <h2 style={{ fontFamily: "'Outfit', sans-serif", fontWeight: 800, fontSize: 'clamp(28px, 4vw, 42px)', letterSpacing: '-0.03em', color: 'var(--ink-1)', margin: '0 0 12px' }}>
-            Everything your agency produces
-          </h2>
-          <p style={{ color: 'var(--ink-2)', fontSize: 16, maxWidth: 500, margin: '0 auto' }}>
-            Competitors do one format. AgencyOS does the whole stack.
-          </p>
-        </div>
-
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: 16 }}>
-          {OUTPUTS.map((o, i) => (
-            <motion.div
-              key={o.label}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: i * 0.07, duration: 0.45 }}
-              className="card-aos"
-              style={{ padding: '24px' }}
-            >
-              <div style={{ width: 40, height: 40, borderRadius: 10, background: `${o.color}1a`, display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 14 }}>
-                <o.icon size={20} color={o.color} />
+                {step.n}
               </div>
-              <div style={{ fontFamily: "'Outfit', sans-serif", fontWeight: 700, fontSize: 15, color: 'var(--ink-1)', marginBottom: 6 }}>{o.label}</div>
-              <div style={{ color: 'var(--ink-3)', fontSize: 13, lineHeight: 1.55 }}>{o.desc}</div>
-            </motion.div>
+              <h3 className="font-semibold mb-1.5" style={{ color: 'var(--ink-1)' }}>{step.title}</h3>
+              <p className="text-[14px] leading-relaxed" style={{ color: 'var(--ink-3)' }}>{step.desc}</p>
+            </div>
           ))}
         </div>
       </section>
 
-      {/* ── Opportunity Research Agent ── */}
-      <section style={{ maxWidth: 1100, margin: '0 auto', padding: '0 24px 80px', position: 'relative', zIndex: 10 }}>
-        <div className="card-aos" style={{ padding: '40px', borderColor: 'rgba(99,102,241,0.2)' }}>
-          <div style={{ display: 'flex', flexWrap: 'wrap', gap: 40, alignItems: 'flex-start' }}>
-            <div style={{ flex: '1 1 300px' }}>
-              <span className="badge-aos" style={{ marginBottom: 16, display: 'inline-flex' }}>
-                <Search size={11} />
-                Opportunity Research Agent
-              </span>
-              <h3 style={{ fontFamily: "'Outfit', sans-serif", fontWeight: 800, fontSize: 'clamp(22px, 3vw, 32px)', letterSpacing: '-0.03em', color: 'var(--ink-1)', margin: '0 0 12px' }}>
-                Find clients before<br />
-                <span style={{ color: 'var(--aos)' }}>they find you</span>
-              </h3>
-              <p style={{ color: 'var(--ink-2)', fontSize: 15, lineHeight: 1.65 }}>
-                Built-in research agent scans Reddit, LinkedIn, X, and Google Trends daily — surfacing trending topics, content gaps, and businesses actively looking to outsource content. No cold outreach. Just warm leads.
-              </p>
-              <span className="badge-cyan" style={{ marginTop: 12, display: 'inline-flex' }}>Agency + Studio plans</span>
+      {/* Trust signals */}
+      <section className="max-w-6xl mx-auto px-6 py-16">
+        <div className="grid sm:grid-cols-3 gap-6">
+          {TRUST.map((t) => (
+            <div key={t.label} className="p-6 rounded-2xl" style={{ background: 'color-mix(in oklab, var(--ink) 3%, transparent)', border: '1px solid color-mix(in oklab, var(--ink) 6%, transparent)' }}>
+              <t.icon size={22} style={{ color: 'var(--aos-2)' }} className="mb-3" />
+              <h3 className="font-semibold mb-1" style={{ color: 'var(--ink-1)' }}>{t.label}</h3>
+              <p className="text-[14px]" style={{ color: 'var(--ink-3)' }}>{t.desc}</p>
             </div>
-            <div style={{ flex: '1 1 300px', display: 'flex', flexDirection: 'column', gap: 12 }}>
-              {RESEARCH_MODULES.map((m, i) => (
-                <motion.div
-                  key={m.label}
-                  initial={{ opacity: 0, x: 20 }}
-                  whileInView={{ opacity: 1, x: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: i * 0.08 }}
-                  style={{ display: 'flex', gap: 14, alignItems: 'flex-start' }}
-                >
-                  <div style={{ width: 36, height: 36, borderRadius: 8, background: 'var(--aos-dim)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                    <m.icon size={16} color="var(--aos-2)" />
-                  </div>
-                  <div>
-                    <div style={{ fontWeight: 600, fontSize: 14, color: 'var(--ink-1)', marginBottom: 2 }}>{m.label}</div>
-                    <div style={{ color: 'var(--ink-3)', fontSize: 13, lineHeight: 1.5 }}>{m.desc}</div>
-                  </div>
-                </motion.div>
-              ))}
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* ── Integrations ── */}
-      <section style={{ maxWidth: 1100, margin: '0 auto', padding: '0 24px 80px', position: 'relative', zIndex: 10 }}>
-        <div style={{ textAlign: 'center', marginBottom: 36 }}>
-          <span className="badge-green" style={{ display: 'inline-flex', marginBottom: 16 }}>
-            <Layout size={11} />
-            Integrations coming Q3 2026
-          </span>
-          <h2 style={{ fontFamily: "'Outfit', sans-serif", fontWeight: 800, fontSize: 'clamp(24px, 3.5vw, 36px)', letterSpacing: '-0.03em', color: 'var(--ink-1)', margin: '0 0 10px' }}>
-            Works where you work
-          </h2>
-          <p style={{ color: 'var(--ink-2)', fontSize: 15, maxWidth: 440, margin: '0 auto' }}>
-            Export to Canva, sync to Figma, push to Notion, schedule via Buffer — all from one brief.
-          </p>
-        </div>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(220px, 1fr))', gap: 12 }}>
-          {INTEGRATIONS.map((int, i) => (
-            <motion.div
-              key={int.name}
-              initial={{ opacity: 0, scale: 0.95 }}
-              whileInView={{ opacity: 1, scale: 1 }}
-              viewport={{ once: true }}
-              transition={{ delay: i * 0.06 }}
-              className="card-aos"
-              style={{ padding: '20px', display: 'flex', gap: 14, alignItems: 'flex-start' }}
-            >
-              <span style={{ fontSize: 24, lineHeight: 1 }}>{int.icon}</span>
-              <div>
-                <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 4 }}>
-                  <span style={{ fontWeight: 700, fontSize: 14, color: 'var(--ink-1)' }}>{int.name}</span>
-                  <span style={{ fontSize: 10, color: 'var(--ink-3)', border: '1px solid var(--border-s)', borderRadius: 4, padding: '1px 5px' }}>soon</span>
-                </div>
-                <div style={{ color: 'var(--ink-3)', fontSize: 12, lineHeight: 1.5 }}>{int.desc}</div>
-              </div>
-            </motion.div>
           ))}
         </div>
       </section>
 
-      {/* ── Competitor comparison ── */}
-      <section id="compare" style={{ maxWidth: 900, margin: '0 auto', padding: '0 24px 80px', position: 'relative', zIndex: 10 }}>
-        <div style={{ textAlign: 'center', marginBottom: 36 }}>
-          <h2 style={{ fontFamily: "'Outfit', sans-serif", fontWeight: 800, fontSize: 'clamp(24px, 3.5vw, 36px)', letterSpacing: '-0.03em', color: 'var(--ink-1)', margin: '0 0 10px' }}>
-            Why AgencyOS beats the rest
-          </h2>
-          <p style={{ color: 'var(--ink-2)', fontSize: 15, maxWidth: 480, margin: '0 auto' }}>
-            Tools like Opus Clip, Repurpose.io, and Capsho each do one thing. AgencyOS does the whole agency.
-          </p>
-        </div>
-        <div className="card-aos" style={{ overflow: 'hidden' }}>
-          <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 14 }}>
-            <thead>
-              <tr style={{ background: 'rgba(99,102,241,0.06)' }}>
-                <th style={{ padding: '14px 20px', textAlign: 'left', color: 'var(--ink-3)', fontWeight: 600, fontSize: 12, letterSpacing: '0.06em', textTransform: 'uppercase', borderBottom: '1px solid var(--border-s)' }}>Tool</th>
-                <th style={{ padding: '14px 20px', textAlign: 'left', color: 'var(--ink-3)', fontWeight: 600, fontSize: 12, letterSpacing: '0.06em', textTransform: 'uppercase', borderBottom: '1px solid var(--border-s)' }}>Price</th>
-                <th style={{ padding: '14px 20px', textAlign: 'left', color: 'var(--ink-3)', fontWeight: 600, fontSize: 12, letterSpacing: '0.06em', textTransform: 'uppercase', borderBottom: '1px solid var(--border-s)' }}>What it does</th>
-                <th style={{ padding: '14px 20px', textAlign: 'left', color: 'var(--ink-3)', fontWeight: 600, fontSize: 12, letterSpacing: '0.06em', textTransform: 'uppercase', borderBottom: '1px solid var(--border-s)' }}>Gap</th>
-              </tr>
-            </thead>
-            <tbody>
-              {COMPETITORS.map((c, i) => (
-                <tr key={c.name} style={{ borderBottom: i < COMPETITORS.length - 1 ? '1px solid var(--border-s)' : 'none', background: c.name === 'AgencyOS' ? 'rgba(99,102,241,0.06)' : 'transparent' }}>
-                  <td style={{ padding: '14px 20px', fontWeight: c.name === 'AgencyOS' ? 700 : 500, color: c.name === 'AgencyOS' ? 'var(--aos-2)' : 'var(--ink-1)' }}>{c.name}</td>
-                  <td style={{ padding: '14px 20px', color: c.name === 'AgencyOS' ? 'var(--emerald)' : 'var(--ink-2)' }}>{c.price}</td>
-                  <td style={{ padding: '14px 20px', color: 'var(--ink-2)', maxWidth: 260 }}>{c.does}</td>
-                  <td style={{ padding: '14px 20px' }}>
-                    {c.doesnt ? (
-                      <span style={{ display: 'flex', alignItems: 'center', gap: 6, color: '#f87171', fontSize: 13 }}>
-                        <X size={13} />
-                        {c.doesnt}
-                      </span>
-                    ) : (
-                      <span style={{ display: 'flex', alignItems: 'center', gap: 6, color: 'var(--emerald)', fontSize: 13, fontWeight: 600 }}>
-                        <Check size={13} />
-                        Full stack
-                      </span>
-                    )}
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      </section>
-
-      {/* ── How it works ── */}
-      <section id="how" style={{ maxWidth: 800, margin: '0 auto', padding: '0 24px 80px', position: 'relative', zIndex: 10 }}>
-        <div style={{ textAlign: 'center', marginBottom: 48 }}>
-          <h2 style={{ fontFamily: "'Outfit', sans-serif", fontWeight: 800, fontSize: 'clamp(26px, 4vw, 38px)', letterSpacing: '-0.03em', color: 'var(--ink-1)', margin: '0 0 12px' }}>
-            3 fields. 90 seconds. Done.
-          </h2>
-          <p style={{ color: 'var(--ink-2)', fontSize: 15, maxWidth: 400, margin: '0 auto' }}>
-            No 10-step wizard. No agency onboarding call. No waiting 3 days.
-          </p>
-        </div>
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 0 }}>
-          {[
-            { n: '01', title: 'Fill in 3 fields', body: 'Brand name, topic, and target audience. That\'s all. No settings menu. No 47 toggles.' },
-            { n: '02', title: 'AI generates 7 outputs in parallel', body: 'All formats run simultaneously. Blog, podcast, video, LinkedIn, emails, clips, and client report — all ready at once.' },
-            { n: '03', title: 'Copy, export, publish', body: 'One-click copy for each format. Canva + Figma export coming soon. Your brief becomes a full content machine.' },
-          ].map((s, i) => (
-            <motion.div
-              key={s.n}
-              initial={{ opacity: 0, x: -20 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: i * 0.12 }}
-              style={{ display: 'flex', gap: 24, padding: '28px 0', borderBottom: i < 2 ? '1px solid var(--border-s)' : 'none' }}
-            >
-              <div style={{ fontFamily: "'Outfit', sans-serif", fontWeight: 800, fontSize: 28, color: 'var(--aos)', opacity: 0.5, lineHeight: 1, flexShrink: 0, width: 40 }}>{s.n}</div>
-              <div>
-                <div style={{ fontFamily: "'Outfit', sans-serif", fontWeight: 700, fontSize: 18, color: 'var(--ink-1)', marginBottom: 6 }}>{s.title}</div>
-                <div style={{ color: 'var(--ink-2)', fontSize: 14, lineHeight: 1.65 }}>{s.body}</div>
-              </div>
-            </motion.div>
-          ))}
-        </div>
-      </section>
-
-      {/* ── Pricing ── */}
-      <section id="pricing" style={{ maxWidth: 1000, margin: '0 auto', padding: '0 24px 80px', position: 'relative', zIndex: 10 }}>
-        <div style={{ textAlign: 'center', marginBottom: 48 }}>
-          <h2 style={{ fontFamily: "'Outfit', sans-serif", fontWeight: 800, fontSize: 'clamp(26px, 4vw, 38px)', letterSpacing: '-0.03em', color: 'var(--ink-1)', margin: '0 0 12px' }}>
-            No agency retainer
-          </h2>
-          <p style={{ color: 'var(--ink-2)', fontSize: 15 }}>Agencies charge $3,000–$10,000/month for this. AgencyOS starts free.</p>
-        </div>
-
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: 16 }}>
-          {[
-            {
-              name: 'Free',
-              price: '$0',
-              sub: 'forever',
-              badge: null,
-              features: ['3 briefs per month', 'All 7 output formats', 'Copy & download', 'Community support'],
-              cta: 'Start free',
-              primary: false,
-            },
-            {
-              name: 'Agency',
-              price: '$49',
-              sub: 'per month',
-              badge: 'Most popular',
-              features: ['Unlimited briefs', 'All 7 output formats', 'Opportunity research agent', 'White-label client reports', 'Canva + Figma export (Q3)', 'Priority support'],
-              cta: 'Start Agency',
-              primary: true,
-            },
-            {
-              name: 'Studio',
-              price: '$99',
-              sub: 'per month',
-              badge: null,
-              features: ['Everything in Agency', 'Multi-client workspace', 'Team seats (5)', 'API access', 'Buffer + Zapier + Make.com', 'Dedicated onboarding'],
-              cta: 'Start Studio',
-              primary: false,
-            },
-          ].map(p => (
-            <motion.div
-              key={p.name}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              className="card-aos"
-              style={{
-                padding: '28px',
-                borderColor: p.primary ? 'rgba(99,102,241,0.35)' : undefined,
-                boxShadow: p.primary ? '0 0 40px rgba(99,102,241,0.12)' : undefined,
-                position: 'relative',
-              }}
-            >
-              {p.badge && (
-                <span className="badge-aos" style={{ position: 'absolute', top: -12, left: '50%', transform: 'translateX(-50%)' }}>{p.badge}</span>
-              )}
-              <div style={{ fontFamily: "'Outfit', sans-serif", fontWeight: 800, fontSize: 18, color: 'var(--ink-1)', marginBottom: 4 }}>{p.name}</div>
-              <div style={{ display: 'flex', alignItems: 'baseline', gap: 4, marginBottom: 4 }}>
-                <span style={{ fontFamily: "'Outfit', sans-serif", fontWeight: 900, fontSize: 36, color: 'var(--ink-1)' }}>{p.price}</span>
-                <span style={{ color: 'var(--ink-3)', fontSize: 13 }}>/{p.sub}</span>
-              </div>
-              <div style={{ borderTop: '1px solid var(--border-s)', margin: '20px 0' }} />
-              <ul style={{ listStyle: 'none', padding: 0, margin: '0 0 24px', display: 'flex', flexDirection: 'column', gap: 10 }}>
-                {p.features.map(f => (
-                  <li key={f} style={{ display: 'flex', alignItems: 'flex-start', gap: 10, color: 'var(--ink-2)', fontSize: 14 }}>
-                    <Check size={14} color="var(--emerald)" style={{ marginTop: 2, flexShrink: 0 }} />
-                    {f}
-                  </li>
-                ))}
-              </ul>
-              <button className={p.primary ? 'btn-aos' : 'btn-ghost'} style={{ width: '100%', justifyContent: 'center' }}>
-                {p.cta}
-              </button>
-            </motion.div>
-          ))}
-        </div>
-      </section>
-
-      {/* ── FAQ ── */}
-      <section style={{ maxWidth: 680, margin: '0 auto', padding: '0 24px 80px', position: 'relative', zIndex: 10 }}>
-        <h2 style={{ fontFamily: "'Outfit', sans-serif", fontWeight: 800, fontSize: 'clamp(24px, 3.5vw, 32px)', letterSpacing: '-0.03em', color: 'var(--ink-1)', textAlign: 'center', marginBottom: 40 }}>
-          Questions
+      {/* Final CTA */}
+      <section className="max-w-3xl mx-auto px-6 py-20 text-center">
+        <h2 className="text-3xl font-bold mb-4" style={{ color: 'var(--ink-1)' }}>
+          Start the conversation today
         </h2>
-        {FAQS.map(f => <Faq key={f.q} {...f} />)}
-      </section>
-
-      {/* ── Final CTA ── */}
-      <section style={{ maxWidth: 700, margin: '0 auto', padding: '0 24px 100px', textAlign: 'center', position: 'relative', zIndex: 10 }}>
-        <div className="glass" style={{ padding: '52px 40px' }}>
-          <h2 style={{ fontFamily: "'Outfit', sans-serif", fontWeight: 900, fontSize: 'clamp(28px, 4vw, 44px)', letterSpacing: '-0.04em', color: 'var(--ink-1)', margin: '0 0 16px' }}>
-            Ship your first brief<br />
-            <span style={{ color: 'var(--aos)' }}>in the next 90 seconds</span>
-          </h2>
-          <p style={{ color: 'var(--ink-2)', fontSize: 16, marginBottom: 32 }}>No account. No card. No agency. Just results.</p>
-          <a href="#" onClick={e => { e.preventDefault(); window.scrollTo({ top: 0, behavior: 'smooth' }) }} className="btn-aos" style={{ fontSize: 16, padding: '16px 36px' }}>
-            Generate free now
-            <ArrowRight size={18} />
-          </a>
-        </div>
-      </section>
-
-      {/* ── Footer ── */}
-      <footer style={{ borderTop: '1px solid var(--border-s)', padding: '24px', textAlign: 'center', position: 'relative', zIndex: 10 }}>
-        <p style={{ color: 'var(--ink-4)', fontSize: 13, margin: 0 }}>
-          © 2026 AgencyOS · Built with AI · No employees were harmed
+        <p className="mb-8" style={{ color: 'var(--ink-3)' }}>
+          No account needed to browse {config.providerPlural.toLowerCase()} or start a match — only to book.
         </p>
-      </footer>
-    </>
+        <button
+          onClick={() => router.push('/search')}
+          className="inline-flex items-center gap-2 px-7 py-3.5 rounded-xl font-semibold transition-transform active:scale-[0.97]"
+          style={{ background: 'var(--accent)', color: 'var(--on-accent)' }}
+        >
+          Find a {config.providerLabel} <ArrowRight size={16} />
+        </button>
+      </section>
+    </main>
   )
 }

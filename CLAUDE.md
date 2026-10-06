@@ -9,7 +9,8 @@ A generic config-driven booking/marketplace platform. ONE codebase, multiple ver
 `vertical.config.ts` — swap this and redeploy to Vercel for a completely different product.
 
 ## Built-in Verticals (PRESETS in vertical.config.ts)
-- `eldercare` — Home care for older adults (ACTIVE)
+- `agency` — AI agent-team agency, chief of staff + specialists (DEFAULT)
+- `eldercare` — Home care for older adults (set `NEXT_PUBLIC_VERTICAL=eldercare`)
 - `mechanics` — Local auto mechanics with AI pre-diagnosis
 - `music` — Music lesson tutors (remote + in-person)
 - `wedding` — Wedding vendors marketplace

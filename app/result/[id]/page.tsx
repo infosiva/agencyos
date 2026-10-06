@@ -8,11 +8,11 @@ import { FileText, Mic, Video, Mail, Share2, Scissors, BarChart3 } from 'lucide-
 type Tab = 'blog' | 'podcast' | 'video' | 'emails' | 'linkedin' | 'clips' | 'report'
 
 const TABS: { id: Tab; label: string; icon: React.ElementType; color: string }[] = [
-  { id: 'blog',     label: 'Blog',     icon: FileText, color: '#6366f1' },
+  { id: 'blog',     label: 'Blog',     icon: FileText, color: 'var(--accent)' },
   { id: 'podcast',  label: 'Podcast',  icon: Mic,      color: '#06b6d4' },
   { id: 'video',    label: 'Video',    icon: Video,    color: '#a78bfa' },
-  { id: 'linkedin', label: 'LinkedIn', icon: Share2,   color: '#3b82f6' },
-  { id: 'emails',   label: 'Emails',   icon: Mail,     color: '#f59e0b' },
+  { id: 'linkedin', label: 'LinkedIn', icon: Share2,   color: 'var(--accent)' },
+  { id: 'emails',   label: 'Emails',   icon: Mail,     color: 'var(--accent)' },
   { id: 'clips',    label: 'Clips',    icon: Scissors, color: '#10b981' },
   { id: 'report',   label: 'Report',   icon: BarChart3,color: '#f472b6' },
 ]
@@ -27,7 +27,7 @@ function CopyBtn({ text, id, copied, setCopied }: { text: string; id: string; co
   return (
     <button
       onClick={() => copy(text, setCopied, id)}
-      style={{ fontSize: 11, padding: '4px 10px', borderRadius: 6, border: '1px solid rgba(255,255,255,0.1)', background: 'rgba(255,255,255,0.04)', color: copied === id ? '#10b981' : 'var(--ink-3)', cursor: 'pointer' }}
+      style={{ fontSize: 11, padding: '4px 10px', borderRadius: 6, border: '1px solid color-mix(in oklab, var(--ink) 10%, transparent)', background: 'color-mix(in oklab, var(--ink) 4%, transparent)', color: copied === id ? '#10b981' : 'var(--ink-3)', cursor: 'pointer' }}
     >
       {copied === id ? '✓ Copied' : 'Copy'}
     </button>
@@ -36,7 +36,7 @@ function CopyBtn({ text, id, copied, setCopied }: { text: string; id: string; co
 
 function Block({ children }: { children: React.ReactNode }) {
   return (
-    <div style={{ background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.07)', borderRadius: 12, padding: '20px 22px', marginBottom: 14 }}>
+    <div style={{ background: 'color-mix(in oklab, var(--ink) 2%, transparent)', border: '1px solid color-mix(in oklab, var(--ink) 7%, transparent)', borderRadius: 12, padding: '20px 22px', marginBottom: 14 }}>
       {children}
     </div>
   )
@@ -55,7 +55,7 @@ export default function ResultPage() {
   if (!result) {
     return (
       <div style={{ minHeight: 'calc(100vh - 54px)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-        <div style={{ width: 24, height: 24, border: '2px solid rgba(99,102,241,0.3)', borderTopColor: '#6366f1', borderRadius: '50%', animation: 'spin 1s linear infinite' }} />
+        <div style={{ width: 24, height: 24, border: '2px solid color-mix(in oklab, var(--accent) 30%, transparent)', borderTopColor: 'var(--accent)', borderRadius: '50%', animation: 'spin 1s linear infinite' }} />
       </div>
     )
   }
@@ -79,7 +79,7 @@ export default function ResultPage() {
       </div>
 
       {/* Tab bar */}
-      <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap', marginBottom: 28, borderBottom: '1px solid rgba(255,255,255,0.06)', paddingBottom: 0 }}>
+      <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap', marginBottom: 28, borderBottom: '1px solid color-mix(in oklab, var(--ink) 6%, transparent)', paddingBottom: 0 }}>
         {TABS.map(t => (
           <button key={t.id} onClick={() => setTab(t.id)}
             style={{
@@ -135,7 +135,7 @@ export default function ResultPage() {
             <div style={{ fontSize: 16, fontWeight: 700, color: 'var(--ink-1)', marginBottom: 4 }}>{podcast.title}</div>
             <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', marginTop: 8 }}>
               {podcast.outline.map((seg, i) => (
-                <span key={i} style={{ fontSize: 11, padding: '3px 8px', background: 'rgba(99,102,241,0.10)', border: '1px solid rgba(99,102,241,0.20)', borderRadius: 6, color: 'var(--aos-2)' }}>{seg}</span>
+                <span key={i} style={{ fontSize: 11, padding: '3px 8px', background: 'color-mix(in oklab, var(--accent) 10%, transparent)', border: '1px solid color-mix(in oklab, var(--accent) 20%, transparent)', borderRadius: 6, color: 'var(--aos-2)' }}>{seg}</span>
               ))}
             </div>
           </Block>
@@ -187,7 +187,7 @@ export default function ResultPage() {
             <Block key={i}>
               <div style={{ fontSize: 11, fontWeight: 700, color: 'var(--aos)', marginBottom: 6 }}>{s.timestamp}</div>
               <div style={{ fontSize: 13, color: 'var(--ink-1)', fontWeight: 600, marginBottom: 4 }}>{s.visual}</div>
-              <div style={{ fontSize: 12, color: 'var(--ink-3)', padding: '6px 10px', background: 'rgba(99,102,241,0.06)', borderRadius: 6, borderLeft: '2px solid rgba(99,102,241,0.3)', marginTop: 6 }}>
+              <div style={{ fontSize: 12, color: 'var(--ink-3)', padding: '6px 10px', background: 'color-mix(in oklab, var(--accent) 6%, transparent)', borderRadius: 6, borderLeft: '2px solid color-mix(in oklab, var(--accent) 30%, transparent)', marginTop: 6 }}>
                 <span style={{ fontWeight: 600 }}>B-roll prompt: </span>{s.broll}
               </div>
             </Block>
@@ -224,12 +224,12 @@ export default function ResultPage() {
           {linkedin.posts.map((p, i) => (
             <Block key={i}>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 10 }}>
-                <div style={{ fontSize: 11, fontWeight: 700, color: '#3b82f6', textTransform: 'uppercase', letterSpacing: 1 }}>Post {i + 1}</div>
+                <div style={{ fontSize: 11, fontWeight: 700, color: 'var(--accent)', textTransform: 'uppercase', letterSpacing: 1 }}>Post {i + 1}</div>
                 <CopyBtn text={`${p.hook}\n\n${p.body}\n\n${p.cta}`} id={`li-${i}`} copied={copied} setCopied={setCopied} />
               </div>
               <div style={{ fontSize: 14, fontWeight: 700, color: 'var(--ink-1)', marginBottom: 8 }}>{p.hook}</div>
               <pre style={{ fontSize: 13, color: 'var(--ink-2)', lineHeight: 1.75, margin: '0 0 10px', whiteSpace: 'pre-wrap', fontFamily: 'inherit' }}>{p.body}</pre>
-              <div style={{ fontSize: 12, color: '#3b82f6', fontWeight: 600 }}>{p.cta}</div>
+              <div style={{ fontSize: 12, color: 'var(--accent)', fontWeight: 600 }}>{p.cta}</div>
             </Block>
           ))}
         </div>
@@ -240,7 +240,7 @@ export default function ResultPage() {
         <div>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: 12 }}>
             {clips.captions.map((c, i) => (
-              <div key={i} style={{ background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.07)', borderRadius: 10, padding: '14px 16px' }}>
+              <div key={i} style={{ background: 'color-mix(in oklab, var(--ink) 2%, transparent)', border: '1px solid color-mix(in oklab, var(--ink) 7%, transparent)', borderRadius: 10, padding: '14px 16px' }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 }}>
                   <span style={{ fontSize: 10, fontWeight: 700, color: '#10b981', textTransform: 'uppercase', letterSpacing: 1 }}>Clip {i + 1}</span>
                   <CopyBtn text={c} id={`clip-${i}`} copied={copied} setCopied={setCopied} />
@@ -263,9 +263,9 @@ export default function ResultPage() {
             <div style={{ fontSize: 12, fontWeight: 600, color: 'var(--ink-3)', textTransform: 'uppercase', letterSpacing: 1, marginBottom: 14 }}>30-Day Content Calendar</div>
             <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
               {report.contentCalendar.map((c, i) => (
-                <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 14, padding: '8px 12px', background: 'rgba(255,255,255,0.02)', borderRadius: 8 }}>
+                <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 14, padding: '8px 12px', background: 'color-mix(in oklab, var(--ink) 2%, transparent)', borderRadius: 8 }}>
                   <span style={{ fontSize: 11, fontWeight: 700, color: 'var(--aos)', minWidth: 48 }}>{c.day}</span>
-                  <span style={{ fontSize: 11, padding: '2px 8px', background: 'rgba(99,102,241,0.08)', borderRadius: 4, color: 'var(--aos-2)', minWidth: 60 }}>{c.format}</span>
+                  <span style={{ fontSize: 11, padding: '2px 8px', background: 'color-mix(in oklab, var(--accent) 8%, transparent)', borderRadius: 4, color: 'var(--aos-2)', minWidth: 60 }}>{c.format}</span>
                   <span style={{ fontSize: 13, color: 'var(--ink-2)' }}>{c.title}</span>
                 </div>
               ))}

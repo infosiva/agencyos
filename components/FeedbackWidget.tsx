@@ -5,7 +5,7 @@
  *
  * Usage:
  *   import FeedbackWidget from '@/components/FeedbackWidget'
- *   <FeedbackWidget siteName="Kwizzo" accentColor="#7c3aed" />
+ *   <FeedbackWidget siteName="Kwizzo" accentColor="var(--accent)" />
  *
  * Requires:
  *   POST /api/feedback  — receives { type, rating, message, email?, page, site }
@@ -19,7 +19,7 @@ const FEEDBACK_TYPES = ['General', 'Bug Report', 'Feature Request', 'Content Iss
 
 interface Props {
   siteName: string
-  /** Main accent gradient start colour, e.g. '#7c3aed'. Defaults to amber. */
+  /** Main accent gradient start colour, e.g. 'var(--accent)'. Defaults to amber. */
   accentColor?: string
   /** Secondary accent colour. Defaults to rose/red. */
   accentColor2?: string
@@ -33,8 +33,8 @@ interface Props {
 
 export default function FeedbackWidget({
   siteName,
-  accentColor  = '#f59e0b',
-  accentColor2 = '#ef4444',
+  accentColor  = 'var(--accent)',
+  accentColor2 = 'var(--accent)',
   apiEndpoint  = '/api/feedback',
   offset       = 24,
   position     = 'right',
@@ -94,7 +94,7 @@ export default function FeedbackWidget({
           padding: '10px 18px', borderRadius: 999,
           background: gradient, color: '#000',
           fontWeight: 700, fontSize: 13, border: 'none', cursor: 'pointer',
-          boxShadow: `0 4px 20px ${accentColor}55, 0 2px 8px rgba(0,0,0,0.4)`,
+          boxShadow: `0 4px 20px color-mix(in oklab, var(--accent) 33%, transparent), 0 2px 8px rgba(0,0,0,0.4)`,
           transition: 'transform 0.15s, box-shadow 0.15s',
         }}
         onMouseEnter={e => (e.currentTarget.style.transform = 'scale(1.05)')}
@@ -110,7 +110,7 @@ export default function FeedbackWidget({
           onClick={() => setOpen(false)}
           style={{
             position: 'fixed', inset: 0, zIndex: 90,
-            background: 'rgba(0,0,0,0.55)',
+            background: 'var(--surface-strong)',
           }}
         />
       )}
@@ -123,26 +123,26 @@ export default function FeedbackWidget({
           width: '100%',
           maxWidth: 420,
           borderRadius: '24px 24px 0 0',
-          background: 'rgba(8,6,20,0.99)',
-          border: `1px solid ${accentColor}30`,
-          boxShadow: `0 0 0 1px ${accentColor}10, 0 32px 64px rgba(0,0,0,0.75)`,
+          background: 'var(--surface-strong)',
+          border: `1px solid color-mix(in oklab, var(--accent) 19%, transparent)`,
+          boxShadow: `0 0 0 1px color-mix(in oklab, var(--accent) 6%, transparent), 0 32px 64px var(--surface-strong)`,
           overflow: 'hidden',
         }}>
           {/* Header */}
           <div style={{
             display: 'flex', alignItems: 'center', justifyContent: 'space-between',
             padding: '20px 20px 16px',
-            borderBottom: '1px solid rgba(255,255,255,0.06)',
+            borderBottom: '1px solid color-mix(in oklab, var(--ink) 6%, transparent)',
           }}>
             <div>
               <p style={{ color: '#fff', fontWeight: 900, fontSize: 15, margin: 0 }}>Share your feedback</p>
-              <p style={{ color: 'rgba(255,255,255,0.35)', fontSize: 12, margin: '3px 0 0' }}>
+              <p style={{ color: 'color-mix(in oklab, var(--ink) 35%, transparent)', fontSize: 12, margin: '3px 0 0' }}>
                 Sent directly to the {siteName} team
               </p>
             </div>
             <button onClick={() => setOpen(false)} style={{
-              background: 'rgba(255,255,255,0.05)', border: 'none', borderRadius: 8,
-              padding: 8, cursor: 'pointer', color: 'rgba(255,255,255,0.4)',
+              background: 'color-mix(in oklab, var(--ink) 5%, transparent)', border: 'none', borderRadius: 8,
+              padding: 8, cursor: 'pointer', color: 'color-mix(in oklab, var(--ink) 40%, transparent)',
               display: 'flex', alignItems: 'center', justifyContent: 'center',
             }}>
               <X style={{ width: 14, height: 14 }} />
@@ -157,7 +157,7 @@ export default function FeedbackWidget({
             }}>
               <CheckCircle style={{ width: 56, height: 56, color: '#34d399' }} />
               <p style={{ color: '#fff', fontWeight: 900, fontSize: 18, margin: 0 }}>Thank you!</p>
-              <p style={{ color: 'rgba(255,255,255,0.45)', fontSize: 13, margin: 0, textAlign: 'center' }}>
+              <p style={{ color: 'color-mix(in oklab, var(--ink) 45%, transparent)', fontSize: 13, margin: 0, textAlign: 'center' }}>
                 Your feedback has been received. We read every message.
               </p>
               <button onClick={() => { reset(); setOpen(false) }} style={{
@@ -180,17 +180,17 @@ export default function FeedbackWidget({
                     style={{
                       width: '100%', appearance: 'none', padding: '10px 14px',
                       borderRadius: 12, fontSize: 13, color: '#fff',
-                      background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.1)',
+                      background: 'color-mix(in oklab, var(--ink) 6%, transparent)', border: '1px solid color-mix(in oklab, var(--ink) 10%, transparent)',
                       outline: 'none', paddingRight: 32,
                     }}
                   >
                     {FEEDBACK_TYPES.map(t => (
-                      <option key={t} value={t} style={{ background: '#080614' }}>{t}</option>
+                      <option key={t} value={t} style={{ background: 'var(--surface-strong)' }}>{t}</option>
                     ))}
                   </select>
                   <ChevronDown style={{
                     position: 'absolute', right: 10, top: '50%', transform: 'translateY(-50%)',
-                    width: 14, height: 14, color: 'rgba(255,255,255,0.3)', pointerEvents: 'none',
+                    width: 14, height: 14, color: 'color-mix(in oklab, var(--ink) 30%, transparent)', pointerEvents: 'none',
                   }} />
                 </div>
               </div>
@@ -209,14 +209,14 @@ export default function FeedbackWidget({
                     >
                       <Star style={{
                         width: 26, height: 26,
-                        color: n <= (hover || rating) ? '#f59e0b' : 'rgba(255,255,255,0.15)',
-                        fill:  n <= (hover || rating) ? '#f59e0b' : 'transparent',
+                        color: n <= (hover || rating) ? 'var(--accent)' : 'color-mix(in oklab, var(--ink) 15%, transparent)',
+                        fill:  n <= (hover || rating) ? 'var(--accent)' : 'transparent',
                         transition: 'color 0.1s, fill 0.1s',
                       }} />
                     </button>
                   ))}
                   {rating > 0 && (
-                    <span style={{ marginLeft: 8, color: '#f59e0b', fontSize: 12, fontWeight: 700 }}>
+                    <span style={{ marginLeft: 8, color: 'var(--accent)', fontSize: 12, fontWeight: 700 }}>
                       {['','Poor','Fair','Good','Great','Excellent'][rating]}
                     </span>
                   )}
@@ -233,12 +233,12 @@ export default function FeedbackWidget({
                   rows={4}
                   style={{
                     width: '100%', padding: '10px 14px', borderRadius: 12, fontSize: 13,
-                    color: '#fff', background: 'rgba(255,255,255,0.06)',
-                    border: '1px solid rgba(255,255,255,0.1)',
+                    color: '#fff', background: 'color-mix(in oklab, var(--ink) 6%, transparent)',
+                    border: '1px solid color-mix(in oklab, var(--ink) 10%, transparent)',
                     outline: 'none', resize: 'none', fontFamily: 'inherit',
                   }}
                 />
-                <p style={{ color: 'rgba(255,255,255,0.2)', fontSize: 10, textAlign: 'right', margin: '3px 0 0' }}>
+                <p style={{ color: 'color-mix(in oklab, var(--ink) 20%, transparent)', fontSize: 10, textAlign: 'right', margin: '3px 0 0' }}>
                   {message.length}/500
                 </p>
               </div>
@@ -246,7 +246,7 @@ export default function FeedbackWidget({
               {/* Email */}
               <div>
                 <label style={labelStyle}>
-                  Email <span style={{ fontWeight: 400, textTransform: 'none', color: 'rgba(255,255,255,0.25)' }}>
+                  Email <span style={{ fontWeight: 400, textTransform: 'none', color: 'color-mix(in oklab, var(--ink) 25%, transparent)' }}>
                     (optional — for replies)
                   </span>
                 </label>
@@ -257,8 +257,8 @@ export default function FeedbackWidget({
                   placeholder="you@example.com"
                   style={{
                     width: '100%', padding: '10px 14px', borderRadius: 12, fontSize: 13,
-                    color: '#fff', background: 'rgba(255,255,255,0.06)',
-                    border: '1px solid rgba(255,255,255,0.1)',
+                    color: '#fff', background: 'color-mix(in oklab, var(--ink) 6%, transparent)',
+                    border: '1px solid color-mix(in oklab, var(--ink) 10%, transparent)',
                     outline: 'none', fontFamily: 'inherit',
                   }}
                 />
@@ -278,7 +278,7 @@ export default function FeedbackWidget({
                   fontWeight: 900, fontSize: 13, border: 'none', cursor: 'pointer',
                   display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8,
                   opacity: sending ? 0.65 : 1, transition: 'opacity 0.15s',
-                  boxShadow: `0 4px 16px ${accentColor}44`,
+                  boxShadow: `0 4px 16px color-mix(in oklab, var(--accent) 27%, transparent)`,
                 }}
               >
                 {sending ? (
@@ -298,7 +298,7 @@ export default function FeedbackWidget({
                 )}
               </button>
 
-              <p style={{ color: 'rgba(255,255,255,0.12)', fontSize: 10, textAlign: 'center', margin: 0 }}>
+              <p style={{ color: 'color-mix(in oklab, var(--ink) 12%, transparent)', fontSize: 10, textAlign: 'center', margin: 0 }}>
                 Goes directly to the {siteName} team · We read every message
               </p>
             </div>
@@ -321,7 +321,7 @@ export default function FeedbackWidget({
 }
 
 const labelStyle: React.CSSProperties = {
-  display: 'block', color: 'rgba(255,255,255,0.45)', fontSize: 11,
+  display: 'block', color: 'color-mix(in oklab, var(--ink) 45%, transparent)', fontSize: 11,
   fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.05em',
   marginBottom: 6,
 }

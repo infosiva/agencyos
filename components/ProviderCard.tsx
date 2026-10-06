@@ -29,22 +29,22 @@ export default function ProviderCard({ p }: { p: Provider }) {
           <img src={p.avatar} alt={p.name} className="w-16 h-16 rounded-2xl object-cover" />
           {p.verified && (
             <div className={`absolute -bottom-1 -right-1 w-6 h-6 rounded-full flex items-center justify-center ${theme.solid}`}>
-              <CheckCircle size={14} className="text-white" />
+              <CheckCircle size={14} className="text-(--ink)" />
             </div>
           )}
         </div>
         <div className="flex-1 min-w-0">
-          <h3 className="font-semibold text-white truncate">{p.name}</h3>
-          <p className="text-white/50 text-sm truncate">{p.headline}</p>
+          <h3 className="font-semibold text-(--ink) truncate">{p.name}</h3>
+          <p className="text-[color-mix(in_oklab,var(--ink)_50%,transparent)] text-sm truncate">{p.headline}</p>
           <div className="flex items-center gap-1 mt-1">
             <span className="stars text-xs">{stars}</span>
             <span className={`text-xs ${theme.textAccent} font-medium`}>{p.rating.toFixed(1)}</span>
-            <span className="text-white/30 text-xs">({p.reviewCount})</span>
+            <span className="text-[color-mix(in_oklab,var(--ink)_30%,transparent)] text-xs">({p.reviewCount})</span>
           </div>
         </div>
         <div className="text-right flex-shrink-0">
-          <div className="font-bold text-white text-lg">£{p.hourlyRate}</div>
-          <div className="text-white/40 text-xs">/{config.pricingModel === 'session' ? 'session' : 'hr'}</div>
+          <div className="font-bold text-(--ink) text-lg">£{p.hourlyRate}</div>
+          <div className="text-[color-mix(in_oklab,var(--ink)_40%,transparent)] text-xs">/{config.pricingModel === 'session' ? 'session' : 'hr'}</div>
         </div>
       </div>
 
@@ -58,7 +58,7 @@ export default function ProviderCard({ p }: { p: Provider }) {
       )}
 
       {/* Meta row */}
-      <div className="flex items-center gap-4 text-xs text-white/40">
+      <div className="flex items-center gap-4 text-xs text-[color-mix(in_oklab,var(--ink)_40%,transparent)]">
         <span className="flex items-center gap-1"><MapPin size={12} />{p.location}</span>
         <span className="flex items-center gap-1"><Clock size={12} />Replies in {p.responseMin}m</span>
       </div>
@@ -68,7 +68,7 @@ export default function ProviderCard({ p }: { p: Provider }) {
         <Link href={`/provider/${p.id}`} className={`flex-1 text-center py-2.5 rounded-xl text-sm font-medium ${theme.solidLight} ${theme.textAccent} hover:bg-violet-500/20 transition-all`}>
           View profile
         </Link>
-        <Link href={`/book/${p.id}`} className={`flex-1 text-center py-2.5 rounded-xl text-sm font-semibold bg-gradient-to-r ${theme.gradient} text-white ${theme.gradientHover} transition-all`}>
+        <Link href={`/book/${p.id}`} className={`flex-1 text-center py-2.5 rounded-xl text-sm font-semibold bg-gradient-to-r ${theme.gradient} text-(--ink) ${theme.gradientHover} transition-all`}>
           Book now
         </Link>
       </div>
