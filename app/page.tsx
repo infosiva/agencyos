@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { motion } from 'framer-motion'
+import { motion, MotionConfig } from 'framer-motion'
 import { MagneticButton } from '@infosiva/shared-ui/modern'
 import {
   ShieldCheck, Heart, Clock, ArrowRight, Search, Sparkles } from 'lucide-react'
@@ -33,6 +33,7 @@ export default function Home() {
   }
 
   return (
+    <MotionConfig reducedMotion="user">
     <main style={{ minHeight: '100vh' }}>
 
       {/* Hero */}
@@ -71,18 +72,21 @@ export default function Home() {
 
           <motion.form
             onSubmit={handleSearch}
+            role="search"
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.15, ease: [0.23, 1, 0.32, 1] }}
             className="flex gap-2 mb-8"
           >
             <div className="relative flex-1">
-              <Search size={18} style={{ color: 'var(--ink-3)' }} className="absolute left-4 top-1/2 -translate-y-1/2" />
+              <Search size={18} aria-hidden="true" style={{ color: 'var(--ink-3)' }} className="absolute left-4 top-1/2 -translate-y-1/2" />
               <input
+                type="search"
+                aria-label={COPY?.searchPlaceholder ?? 'What kind of care do you need?'}
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
                 placeholder={COPY?.searchPlaceholder ?? 'What kind of care do you need?'}
-                className="w-full pl-11 pr-4 py-3.5 rounded-xl text-[15px] outline-none"
+                className="w-full pl-11 pr-4 py-3.5 rounded-xl text-[15px] outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--accent)]"
                 style={{ background: 'color-mix(in oklab, var(--ink) 4%, transparent)', border: '1px solid color-mix(in oklab, var(--ink) 8%, transparent)', color: 'var(--ink-1)' }}
               />
             </div>
@@ -179,5 +183,6 @@ export default function Home() {
         </button>
       </section>
     </main>
+    </MotionConfig>
   )
 }
